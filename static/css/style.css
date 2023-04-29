@@ -1,0 +1,13 @@
+header ul {
+    list-style: none;
+}
+
+body {
+    height: 100%;
+}
+
+#profileDropDown {
+    display: none;
+    width: 100px;
+    height: 50px;
+}

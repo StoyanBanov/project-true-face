@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/static/scripts/main.js" type="module"></script>
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+    <title>Trueface</title>
+</head>
+<header>
+    <nav id="mainNav">
+        <ul>
+            <li><a href="/">Trueface</a></li>
+            {{#if 1}}
+            <li><a href="/">home</a></li>
+            <li><a href="/chat">chat</a></li>
+            <div>
+                <a href="javascript:void(0)">
+                    <li><img id="profilePic" src="{{user.profilePic}}" alt="profilePick"></li>
+                </a>
+                <div id="profileDropDown">
+                    <li><a href="/profile">profile</a></li>
+                    <li><a href="/profile/settings">settings</a></li>
+                    <li><a href="/logout">logout</a></li>
+                </div>
+            </div>
+            {{else}}
+            <li><a href="/login">login</a></li>
+            <li><a href="/register">register</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+</header>
+
+<body>
+    {{{body}}}
+</body>
+
+</html>
