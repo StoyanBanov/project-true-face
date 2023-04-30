@@ -1,0 +1,27 @@
+{{#if errorMsgs}}
+<div>
+    {{#each errorMsgs}}
+    <p>{{this}}</p>
+    {{/each}}
+</div>
+{{/if}}
+<div>
+    <form action="/register" method="post">
+        <label for="username">Username</label>
+        <input type="text" name="username" placeholder="username" value="{{user.username}}"><br>
+        <label for="email">E-mail</label>
+        <input type="text" name="email" placeholder="email" value="{{user.email}}"><br>
+        <label for="gender">Gender</label>
+        <div>
+            <input type="radio" name="gender" value="male">
+            <label for="male">male</label>
+            <input type="radio" name="gender" value="female">
+            <label for="female">female</label>
+        </div>
+        <label for="password">Password</label>
+        <input type="password" name="password" placeholder="password"><br>
+        <label for="rePassword">Repeat password</label>
+        <input type="password" name="rePassword" placeholder="repeat password"><br>
+        <input type="submit" value="Register">
+    </form>
+</div>

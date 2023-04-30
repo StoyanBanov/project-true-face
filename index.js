@@ -8,7 +8,7 @@ const app = require('express')()
 start()
 
 async function start() {
-    //await databaseConfig(app)
+    await databaseConfig(app)
     expressConfig(app)
     routes(app)
 

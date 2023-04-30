@@ -2,9 +2,12 @@ const { Schema, model } = require('mongoose')
 
 const schema = new Schema({
     username: { type: String, required: true, minLength: 5, maxLength: 20 },
-    email: { type: String, required: true, minLength: 8, maxLength: 30 },
+    email: { type: String, required: true, minLength: 7, maxLength: 30 },
+    gender: { type: String, enum: ['', 'male', 'female'] },
     profilePic: { type: String },
-    password: { type: String, required: true, minLength: 10, maxLength: 30 }
+    password: { type: String, required: true },
+    roles: { type: [String], enum: ['user', 'admin'], default: ['user'] },
+    verified: { type: Boolean, default: false }
 })
 
 schema.index({ username: 1 }, {
