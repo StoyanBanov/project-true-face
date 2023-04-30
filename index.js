@@ -12,5 +12,5 @@ async function start() {
     expressConfig(app)
     routes(app)
 
-    app.listen(port, () => console.log(`Listening at ${port}`))
+    app.listen(process.env.PORT || port, () => console.log(`Listening at ${port}`))
 }
