@@ -18,7 +18,7 @@ async function sendConfirmationEmail({ _id, email, username }) {
         from: 'true-face@abv.bg',
         to: email,
         subject: 'E-mail verification',
-        text: `Hello, ${username}!\nTo verify plase go to http://localhost:3000/verify-email/${_id}`,
+        text: `Hello, ${username}!\nTo verify please go to http://localhost:3000/verify-email/${_id}`,
     });
 }
 

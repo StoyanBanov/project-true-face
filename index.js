@@ -1,7 +1,7 @@
 const databaseConfig = require('./config/database')
 const expressConfig = require('./config/express')
 const routes = require('./config/routes')
-const { port } = require('./variables')
+const { port, hostname } = require('./variables')
 
 const app = require('express')()
 

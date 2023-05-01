@@ -1,13 +1,34 @@
-header ul {
-    list-style: none;
+header nav>a,
+header nav>ul,
+header nav>div {
+    display: inline;
 }
 
-body {
-    height: 100%;
+#profileDrop {
+    position: relative;
+}
+
+header ul li {
+    display: inline;
 }
 
 #profileDropDown {
+    position: absolute;
     display: none;
-    width: 100px;
-    height: 50px;
+    left: 0px;
+    width: 200px;
+    height: 200px;
+}
+
+#profileDropDown>a {
+    display: block;
+}
+
+.requirement-message {
+    color: red;
+}
+
+#profilePic {
+    width: 30px;
+    height: 30px;
 }

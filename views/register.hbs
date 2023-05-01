@@ -1,3 +1,4 @@
+<script src="/static/scripts/register.js" type="module"></script>
 {{#if errorMsgs}}
 <div>
     {{#each errorMsgs}}
@@ -7,21 +8,38 @@
 {{/if}}
 <div>
     <form action="/register" method="post">
-        <label for="username">Username</label>
-        <input type="text" name="username" placeholder="username" value="{{user.username}}"><br>
-        <label for="email">E-mail</label>
-        <input type="text" name="email" placeholder="email" value="{{user.email}}"><br>
-        <label for="gender">Gender</label>
         <div>
-            <input type="radio" name="gender" value="male">
-            <label for="male">male</label>
-            <input type="radio" name="gender" value="female">
-            <label for="female">female</label>
+            <div>
+                <label for="username">Username</label>
+                <input type="text" name="username" placeholder="username" value="{{user.username}}">
+                <label class="requirement-message"></label><br>
+            </div>
+            <div>
+                <label for="email">E-mail</label>
+                <input type="text" name="email" placeholder="email" value="{{user.email}}">
+                <label class="requirement-message"></label><br>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" placeholder="password">
+                <label class="requirement-message"></label><br>
+            </div>
+            <div>
+                <label for="rePassword">Repeat password</label>
+                <input type="password" name="rePassword" placeholder="repeat password">
+                <label class="requirement-message"></label><br>
+            </div>
+
+            <div>
+                <label for="gender">Gender</label>
+                <div>
+                    <input type="radio" name="gender" value="male">
+                    <label for="male">male</label>
+                    <input type="radio" name="gender" value="female">
+                    <label for="female">female</label>
+                </div>
+            </div>
         </div>
-        <label for="password">Password</label>
-        <input type="password" name="password" placeholder="password"><br>
-        <label for="rePassword">Repeat password</label>
-        <input type="password" name="rePassword" placeholder="repeat password"><br>
         <input type="submit" value="Register">
     </form>
 </div>

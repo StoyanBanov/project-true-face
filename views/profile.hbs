@@ -1,0 +1,7 @@
+<img src="/static/images/{{profilePic}}" alt="profile picture">
+
+<form action="/profile" method="post" enctype="multipart/form-data">
+    <label for="profilePic">{{#if profilePic}}change{{else}}upload{{/if}}</label><br>
+    <input type="file" name="profilePic"><br>
+    <input type="submit" value="Upload"><br>
+</form>

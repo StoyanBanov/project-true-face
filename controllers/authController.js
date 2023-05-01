@@ -1,9 +1,11 @@
 const { body, validationResult } = require('express-validator')
-const { register, verifyEmail } = require('../services/authService')
+const { register, login } = require('../services/authService')
 const { createToken, verifyToken } = require('../util/jwtUtil')
 const { passwordRegex } = require('../variables')
 const { guestOnly, nonVerifiedOnly } = require('../util/guards')
 const { sendConfirmationEmail } = require('../util/emailVerification')
+const { updateUserProperty } = require('../services/userService')
+const image = require('../middleware/image')
 
 const authController = require('express').Router()
 
@@ -17,7 +19,7 @@ authController.get('/verify-email/:id', nonVerifiedOnly(), (req, res) => {
 
 authController.post('/verify-email/:id', nonVerifiedOnly(), async (req, res) => {
     try {
-        await verifyEmail(req.params.id)
+        await updateUserProperty(req.params.id, { verified: true })
         const data = verifyToken(req.cookies.jwt)
         data.verified = true
         createToken(data, res)
@@ -32,14 +34,14 @@ authController.get('/register', guestOnly(), (req, res) => {
 })
 
 authController.post('/register', guestOnly(),
-    body(['username', 'email', 'password', 'gender']).trim(),
+    body(['username', 'email', 'password', 'rePassword', 'gender']).trim(),
     body('username').isAlphanumeric().withMessage('The username may consist only of english letters and/or numbers!')
         .isLength({ min: 5, max: 20 }).withMessage('The password must be between 5 and 20 characters!'),
     body('email').isEmail().withMessage('The email is not valid!')
         .isLength({ min: 7, max: 30 }).withMessage('The password must be between 7 and 30 characters!'),
     body('password').matches(passwordRegex).withMessage('The password is not safe enough!')
         .isLength({ min: 10, max: 30 }).withMessage('The password must be between 10 and 30 characters!'),
-    body('rePassword').custom((value, { req }) => value == req.body.password).whitelist('The passwords are not the same!'),
+    body('rePassword').custom((value, { req }) => value == req.body.password).withMessage('The passwords are not the same!'),
     async (req, res) => {
         const { errors } = validationResult(req)
         try {
@@ -56,8 +58,23 @@ authController.post('/register', guestOnly(),
         }
     })
 
-authController.all('/*', (req, res, next) => {
-    next()
+authController.get('/login', guestOnly(), (req, res) => {
+    res.render('login')
 })
+
+authController.post('/login', guestOnly(),
+    body(['username', 'password']).trim(),
+    async (req, res) => {
+        try {
+            const user = await login(req.body)
+            createToken(user, res)
+            res.redirect('/')
+        } catch (error) {
+            res.render('login', {
+                errorMsgs: [error.message],
+                user: req.body
+            })
+        }
+    })
 
 module.exports = authController

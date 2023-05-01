@@ -1,0 +1,22 @@
+{{#if errorMsgs}}
+<div>
+    {{#each errorMsgs}}
+    <p>{{this}}</p>
+    {{/each}}
+</div>
+{{/if}}
+<div>
+    <form action="/login" method="post">
+        <div>
+            <div>
+                <label for="username">Username</label>
+                <input type="text" name="username" placeholder="username" value="{{user.username}}">
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" placeholder="password">
+            </div>
+        </div>
+        <input type="submit" value="Login">
+    </form>
+</div>
