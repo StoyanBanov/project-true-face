@@ -1,7 +1,7 @@
 const { Schema, model, Types: { ObjectId } } = require('mongoose')
 
 const schema = new Schema({
-    conversationId: { type: ObjectId, ref: 'Conversation' },
+    conversationId: { type: ObjectId, ref: 'Chat' },
     ownerId: { type: ObjectId, ref: 'User' },
     text: { type: String, maxLength: 2000 }
 })

@@ -9,7 +9,7 @@ header nav>div {
 }
 
 header ul li {
-    display: inline;
+    display: inline-block;
 }
 
 #profileDropDown {

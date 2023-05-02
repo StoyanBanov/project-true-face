@@ -27,6 +27,10 @@ schema.index({ email: 1 }, {
     }
 })
 
+schema.virtual('friendsCount').get(function () {
+    return this.friendIds.length
+})
+
 const User = model('User', schema)
 
 module.exports = User

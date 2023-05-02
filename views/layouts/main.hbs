@@ -19,11 +19,9 @@
             <li><a href="/">home</a></li>
             <li>
                 <form id="searchForm" action="/search" method="get">
-                    <label for="search">search</label>
-                    <input type="text" placeholder="search..." value="{{search}}">
+                    <input type="text" name="search" placeholder="search..." value="{{search}}">
                 </form>
             </li>
-            <li><a href="/chat">chat</a></li>
             {{else}}
             <li><a href="/login">login</a></li>
             <li><a href="/register">register</a></li>
@@ -31,9 +29,10 @@
         </ul>
         {{#if isUser}}
         <div id="profileDrop">
+            <a href="/chat">chat</a>
             <a href="javascript:void(0)">
-                <img id="profilePic" src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}/profile.png{{/if}}"
-                    alt="profilePick">
+                <img width="16" height="20" id="profilePic"
+                    src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}/profile.png{{/if}}" alt="profilePick">
             </a>
             <div id="profileDropDown">
                 <a href="/profile">profile</a>
