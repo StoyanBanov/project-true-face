@@ -17,12 +17,19 @@
         <ul>
             {{#if isUser}}
             <li><a href="/">home</a></li>
+            <li>
+                <form id="searchForm" action="/search" method="get">
+                    <label for="search">search</label>
+                    <input type="text" placeholder="search..." value="{{search}}">
+                </form>
+            </li>
             <li><a href="/chat">chat</a></li>
             {{else}}
             <li><a href="/login">login</a></li>
             <li><a href="/register">register</a></li>
             {{/if}}
         </ul>
+        {{#if isUser}}
         <div id="profileDrop">
             <a href="javascript:void(0)">
                 <img id="profilePic" src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}/profile.png{{/if}}"
@@ -34,6 +41,7 @@
                 <a href="/logout">logout</a>
             </div>
         </div>
+        {{/if}}
     </nav>
 </header>
 

@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, Types: { ObjectId } } = require('mongoose')
 
 const schema = new Schema({
     username: { type: String, required: true, minLength: 5, maxLength: 20 },
@@ -7,7 +7,8 @@ const schema = new Schema({
     profilePic: { type: String },
     password: { type: String, required: true },
     roles: { type: [String], enum: ['user', 'admin'], default: ['user'] },
-    verified: { type: Boolean, default: false }
+    verified: { type: Boolean, default: false },
+    friendIds: { type: [ObjectId], ref: 'User', default: [] }
 })
 
 schema.index({ username: 1 }, {

@@ -1,6 +1,6 @@
-const submitInp = document.querySelector('form > input')
+const submitInp = document.querySelector('#registerForm > input')
 submitInp.disabled = true
-const requirementsArr = [...document.querySelectorAll('form > div > div :nth-child(3)')]
+const requirementsArr = [...document.querySelectorAll('#registerForm > div > div :nth-child(3)')]
 const requirementsObj = {
     username: ['5-20 characters', 'only english letters and/or digits'],
     email: ['8-30 characters'],
