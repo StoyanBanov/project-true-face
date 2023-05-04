@@ -1,14 +1,23 @@
+import { profilePicView, chatIconView } from "/static/views.js"
+
 const profilePic = document.getElementById('profilePic')
-const profileDropDown = document.getElementById('profileDropDown')
-document.querySelector('html').addEventListener('click', (e) => {
-    if (profileDropDown.style.display != 'none' && profileDropDown.style.display != '' && e.target.parentElement != profileDropDown) hideProfileDrop(e)
-    else if (e.target == profilePic) showProfileDrop(e)
+const chatIcon = document.getElementById('chatIcon')
+const dropDown = document.getElementById('dropDown')
+let currentViewName
+window.addEventListener('click', async (e) => {
+    if (dropDown.style.display == 'block' && e.target != dropDown && e.target != profilePic && e.target != chatIcon) {
+        dropDown.style.display = 'none'
+    } else if (e.target == profilePic) {
+        handleDropDown('profilePic', profilePicView)
+    } else if (e.target == chatIcon) {
+        handleDropDown('chatView', chatIconView)
+    }
 })
 
-function showProfileDrop(e) {
-    e.preventDefault()
-    profileDropDown.style.display = 'block'
-}
-function hideProfileDrop(e) {
-    profileDropDown.style.display = 'none'
+async function handleDropDown(name, viewCallBack) {
+    if (dropDown.style.display != 'block' || currentViewName != name) {
+        dropDown.style.display = 'block'
+        dropDown.innerHTML = await viewCallBack()
+        currentViewName = name
+    } else if (currentViewName == name) dropDown.style.display = 'none'
 }

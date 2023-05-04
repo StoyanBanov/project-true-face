@@ -2,7 +2,7 @@ const Chat = require("../models/Chat")
 const User = require("../models/User")
 
 async function getAllUsers(currentId, { search }, skip) {
-    return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).skip(skip).limit(2).lean()
+    return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).skip(skip * 2).limit(2).lean()
 }
 
 async function updateUserProperty(id, property) {
@@ -31,8 +31,8 @@ async function acceptFriendship(userId, friendId) {
     } else throw new Error('No such friend request')
 }
 
-async function getFriendRequests(userId) {
-    return User.findById(userId).select('friendRequestIds').populate('friendRequestIds').lean()
+async function getFriendRequests(userId, skip) {
+    return User.findById(userId).select('friendRequestIds').populate('friendRequestIds').skip(skip * 2).limit(2).lean()
 }
 
 async function findUserById(id) {

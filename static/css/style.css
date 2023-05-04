@@ -1,27 +1,38 @@
+body {
+    margin: 0;
+}
+
+header nav {
+    background-color: aliceblue;
+}
+
 header nav>a,
-header nav>ul,
+header nav>#headerUl,
 header nav>div {
     display: inline;
 }
 
 #profileDrop {
     position: relative;
+    left: 60%;
 }
 
-header ul li {
+#headerUl li {
     display: inline-block;
 }
 
-#profileDropDown {
+#dropDown {
     position: absolute;
     display: none;
     left: 0px;
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 100px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-#profileDropDown>a {
+#dropDown>a {
     display: block;
+    width: 70px;
 }
 
 .requirement-message {

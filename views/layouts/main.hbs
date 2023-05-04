@@ -14,14 +14,14 @@
 <header>
     <nav id="mainNav">
         <a href="/">Trueface</a>
-        <ul>
+        <ul id="headerUl">
             {{#if isUser}}
-            <li><a href="/">home</a></li>
             <li>
                 <form id="searchForm" action="/search" method="get">
                     <input type="text" name="search" placeholder="search..." value="{{search}}">
                 </form>
             </li>
+            <li><a href="/">home</a></li>
             {{else}}
             <li><a href="/login">login</a></li>
             <li><a href="/register">register</a></li>
@@ -29,15 +29,13 @@
         </ul>
         {{#if isUser}}
         <div id="profileDrop">
-            <a href="/chat">chat</a>
+            <a id="chatIcon" href="javascript:void(0)">chat</a>
             <a href="javascript:void(0)">
                 <img width="16" height="20" id="profilePic"
                     src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}/profile.png{{/if}}" alt="profilePick">
             </a>
-            <div id="profileDropDown">
-                <a href="/profile">profile</a>
-                <a href="/profile/settings">settings</a>
-                <a href="/logout">logout</a>
+            <div id="dropDown">
+
             </div>
         </div>
         {{/if}}
