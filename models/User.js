@@ -8,7 +8,9 @@ const schema = new Schema({
     password: { type: String, required: true },
     roles: { type: [String], enum: ['user', 'admin'], default: ['user'] },
     verified: { type: Boolean, default: false },
-    friendIds: { type: [ObjectId], ref: 'User', default: [] }
+    friendIds: { type: [ObjectId], ref: 'User', default: [] },
+    friendRequestIds: { type: [ObjectId], ref: 'User', default: [] },
+    friendPendingIds: { type: [ObjectId], ref: 'User', default: [] }
 })
 
 schema.index({ username: 1 }, {

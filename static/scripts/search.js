@@ -1,11 +1,13 @@
-import { get } from "/static/scripts/api.js"
+import { createUserCards } from "/static/scripts/util.js"
+import { get, put } from "/static/scripts/api.js"
 const usersList = document.getElementById('usersList')
 let skip = 1
 let scrolledCount = 0
 let scrollYPrev = 0
+let users
 
 window.addEventListener('scroll', async e => {
-    if (scrollYPrev < window.scrollY) {
+    if (users.length > 0 && scrollYPrev < window.scrollY) {
         scrolledCount++
         scrollYPrev = window.scrollY
         if (scrolledCount % 45 == 0) {
@@ -14,22 +16,23 @@ window.addEventListener('scroll', async e => {
     }
 })
 
-function createUserCards(users) {
-    const userLis = users.map(user => {
-        const li = document.createElement('li')
-        li.innerHTML = `<div>
-    <img width="100" height="100" src="/static/images/${user.profilePic ? `${user.profilePic}` : 'profile.png'}">
-    <h2>{{username}}</h2>
-    ${user.isFriend ? `<p>friends</p>` : `<a href="/add-friend/${user._id}">Add friend</a>`}
-    <p>${user.friendsCount} friends</p>
-</div>`
-        return li
-    });
-    return userLis
-}
+usersList.addEventListener('click', async e => {
+    if (e.target.tagName != 'A') return
+    const li = e.target.parentElement
+
+    if (e.target.textContent == 'Add') {
+        await put('people/request-friend', { friendId: li.id })
+        li.innerHTML += `<p>Friendship requested</p>`
+    } else if (e.target.textContent == 'Accept') {
+        await put('people/accept-friend', { friendId: li.id })
+        li.innerHTML += `<p>friends</p>`
+    }
+
+    e.target.remove()
+})
 
 async function getUsers() {
-    const users = await get('people/' + skip)
+    users = await get('people/' + skip)
     usersList.append(...createUserCards(users))
     skip++
 }

@@ -32,3 +32,7 @@ header ul li {
     width: 30px;
     height: 30px;
 }
+
+#friendRequests {
+    display: none;
+}

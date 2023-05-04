@@ -9,20 +9,16 @@ homeController.get('/', userOnly(), (req, res) => {
 })
 
 homeController.get('/search', userOnly(), async (req, res) => {
-    const users = (await getAllUsers(req.user._id, req.query, 0)).map(u => Object.assign(u, { friendsCount: u.friendIds.length, isFriend: u.friendIds.map(String).includes(req.user._id) }))
+    const users = (await getAllUsers(req.user._id, req.query, 0)).map(u => Object.assign(u, {
+        friendsCount: u.friendIds.length,
+        isFriend: u.friendIds.map(String).includes(req.user._id),
+        isPending: u.friendRequestIds.map(String).includes(req.user._id),
+        isRequested: u.friendPendingIds.map(String).includes(req.user._id)
+    }))
     res.render('search', {
         users,
         search: req.query.search
     })
-})
-
-homeController.get('/add-friend/:friendId', userOnly(), async (req, res) => {
-    try {
-        await addFriend(req.user._id, req.params.friendId)
-    } catch (error) {
-        console.log(error.message);
-    }
-    res.redirect('/search')
 })
 
 homeController.get('/logout', userOnly(), (req, res) => {
