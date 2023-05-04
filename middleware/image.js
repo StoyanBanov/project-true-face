@@ -17,7 +17,7 @@ module.exports = () => (req, res, next) => {
 
         if (match) {
             const file = fileData.slice(match.index).trim()
-            const prefix = ('00000' + (Math.random() * 9999999 | 0)).slice(-5)
+            const prefix = ('00000' + (Math.random() * 9999999 | 0).toString(16)).slice(-5)
             const uniqueFilename = `${prefix}_${filename}`
             await fs.writeFile(`./static/images/${uniqueFilename}`, file, 'binary')
             req.user.profilePic = uniqueFilename

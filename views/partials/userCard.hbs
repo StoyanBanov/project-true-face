@@ -1,7 +1,5 @@
-<div>
+<li>
     <img width="100" height="100" src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png" {{/if}}>
-</div>
-<div>
     <h2>{{username}}</h2>
     {{#if isFriend}}
     <p>friends</p>
@@ -9,4 +7,4 @@
     <a href="/add-friend/{{_id}}">Add friend</a>
     {{/if}}
     <p>{{friendsCount}} friends</p>
-</div>
+</li>

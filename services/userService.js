@@ -1,7 +1,7 @@
 const User = require("../models/User")
 
-async function getAllUsers(currentId, { search }) {
-    return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).limit(2).lean()
+async function getAllUsers(currentId, { search }, skip) {
+    return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).skip(skip).limit(2).lean()
 }
 
 async function updateUserProperty(id, property) {

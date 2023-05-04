@@ -9,7 +9,7 @@ homeController.get('/', userOnly(), (req, res) => {
 })
 
 homeController.get('/search', userOnly(), async (req, res) => {
-    const users = (await getAllUsers(req.user._id, req.query)).map(u => Object.assign(u, { friendsCount: u.friendIds.length, isFriend: u.friendIds.map(String).includes(req.user._id) }))
+    const users = (await getAllUsers(req.user._id, req.query, 0)).map(u => Object.assign(u, { friendsCount: u.friendIds.length, isFriend: u.friendIds.map(String).includes(req.user._id) }))
     res.render('search', {
         users,
         search: req.query.search
