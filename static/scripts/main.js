@@ -1,7 +1,7 @@
-import { profilePicView, chatIconView, chatBoxView } from "/static/views.js"
+import { profilePicView, chatIconView, chatBoxView, chatBoxLiView } from "/static/views.js"
 import { get } from "/static/scripts/api.js"
 
-const userId = Object.fromEntries(document.cookie.split('; ').map(c => c.split('='))).userId
+const userId = await get('profile/current-user?select=_id')
 const socket = io('/', { query: `userId=${userId}` });
 
 const profilePic = document.getElementById('profilePic')
@@ -28,22 +28,20 @@ dropDown.addEventListener('click', async e => {
     }
 })
 
-socket.on('chat message', async (text, chatId) => {
-    const messageLi = document.createElement('li');
-    messageLi.textContent = text;
+socket.on('chat message', async (text, chatId, ownerId) => {
     let chatUl = document.getElementById(chatId + '-chat')
     if (!chatUl) {
         await appendChatBox(chatId)
         chatUl = document.getElementById(chatId + '-chat')
     }
-    chatUl.appendChild(messageLi);
+    chatUl.innerHTML += chatBoxLiView({ text, ownerId }, userId)
     chatUl.scrollTo(0, chatUl.scrollHeight);
 });
 
-async function handleDropDown(name, viewCallBack, ...params) {
+function handleDropDown(name, viewCallBack, ...params) {
     if (dropDown.style.display != 'block' || currentViewName != name) {
         dropDown.style.display = 'block'
-        dropDown.innerHTML = await viewCallBack(...params)
+        dropDown.innerHTML = viewCallBack(...params)
         currentViewName = name
     } else if (currentViewName == name) dropDown.style.display = 'none'
 }
@@ -55,23 +53,21 @@ async function appendChatBox(chatId) {
     const chat = await get(`chats/${chatId}`)
     chatBoxDiv.style.right = `${openChatBoxes++ * 320 + 100}px`
 
-    chatBoxDiv.innerHTML = await chatBoxView(chat)
+    chatBoxDiv.innerHTML = chatBoxView(chat, userId)
     document.body.appendChild(chatBoxDiv)
+}
 
-    const chatForm = document.querySelector('.chatForm');
-    const chatInput = document.querySelector('.chatInput');
+export function onMessageSubmit(e) {
+    e.preventDefault();
+    const text = Object.fromEntries((new FormData(e.target)).entries()).text
+    if (text) {
+        socket.emit('chat message', text, e.target.parentElement.children[0].id.split('-')[0]);
+        e.target.reset()
+    }
+}
+
+export function onMessageKeyUp(e) {
     const chatSubmit = document.querySelector('.chatForm > button');
-
-    chatInput.addEventListener('keypress', e => {
-        if (e.target.value) chatSubmit.disabled = false
-        else chatSubmit.disabled = true
-    })
-
-    chatForm.addEventListener('submit', e => {
-        e.preventDefault();
-        if (chatInput.value) {
-            socket.emit('chat message', chatInput.value, e.target.parentElement.children[0].id.split('-')[0]);
-            chatInput.value = '';
-        }
-    });
+    if (e.target.value) chatSubmit.disabled = false
+    else chatSubmit.disabled = true
 }

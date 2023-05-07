@@ -103,7 +103,3 @@ header nav>div {
 .chatMessages>li {
     padding: 0.5rem 1rem;
 }
-
-.chatMessages>li:nth-child(odd) {
-    background: #efefef;
-}

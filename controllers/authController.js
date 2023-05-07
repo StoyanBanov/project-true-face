@@ -48,7 +48,6 @@ authController.post('/register', guestOnly(),
             if (errors.length > 0) throw errors
             const user = await register(req.body)
             createToken(user, res)
-            res.cookie('userId', user._id, { maxAge: 14400000 })
             await sendConfirmationEmail(user)
             res.render('non-verified', { email: user.email })
         } catch (error) {
@@ -69,7 +68,6 @@ authController.post('/login', guestOnly(),
         try {
             const user = await login(req.body)
             createToken(user, res)
-            res.cookie('userId', user._id, { maxAge: 14400000 })
             res.redirect('/')
         } catch (error) {
             res.render('login', {

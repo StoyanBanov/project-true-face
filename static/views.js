@@ -4,7 +4,7 @@ export function profilePicView() {
             <a href="/logout">logout</a>`
 }
 
-export async function chatIconView(chats) {
+export function chatIconView(chats) {
     return `<a href="javascript:void(0)">create chat</a>
             <ul>${chats.map(c => `<li>
             <img width="30" height="30" src="/static/images/${c.userIds[0].profilePic ?? 'profile.png'}">
@@ -12,10 +12,14 @@ export async function chatIconView(chats) {
             </li>`).join('\n')}</ul>`
 }
 
-export function chatBoxView(chat) {
-    return `<ul id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => `<li>${m.text}</li>`).join('\n')}</ul>
-    <form class="chatForm" action="">
-        <input class="chatInput" autocomplete="off" />
+export function chatBoxView(chat, userId) {
+    return `<ul id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
+    <form onsubmit="onMessageSubmit(event)" class="chatForm" action="">
+        <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
         <button disabled>Send</button>
     </form>`
+}
+
+export function chatBoxLiView(message, userId) {
+    return `<li style="${userId == message.ownerId ? 'text-align:right;"' : 'color:blue;"'}>${message.text}</li>`
 }

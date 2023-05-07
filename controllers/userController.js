@@ -8,6 +8,12 @@ userController.get('/', (req, res) => {
     res.render('profile', req.user)
 })
 
+userController.get('/current-user', (req, res) => {
+    const select = req.query.select
+    if (select) res.json(req.user[select])
+    else res.json(req.user)
+})
+
 userController.post('/', image(), async (req, res) => {
     try {
         await updateUserProperty(req.user._id, { profilePic: req.user.profilePic })

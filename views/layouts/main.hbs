@@ -9,6 +9,10 @@
     <title>Trueface</title>
     {{#if isUser}}
     <script src="/static/scripts/main.js" type="module"></script>
+    <script type="module">
+        import { onMessageSubmit, onMessageKeyUp } from '/static/scripts/main.js';
+        Object.assign(window, { onMessageSubmit, onMessageKeyUp })
+    </script>
     <script src="/socket.io/socket.io.js"></script>
     {{/if}}
 </head>
