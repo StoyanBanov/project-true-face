@@ -16,7 +16,7 @@ async function request(method, url, body) {
             if (!response.ok) throw new Error(body.message)
             return body
         } catch (error) {
-            return response
+            return false
         }
     } catch (error) {
         window.alert(error.message)

@@ -28,14 +28,15 @@ dropDown.addEventListener('click', async e => {
     }
 })
 
-socket.on('chat message', async (text, chatId, ownerId) => {
+socket.on('chat message', async ({ text, chatId, ownerId, createdOn }) => {
     let chatUl = document.getElementById(chatId + '-chat')
     if (!chatUl) {
         await appendChatBox(chatId)
         chatUl = document.getElementById(chatId + '-chat')
+    } else {
+        chatUl.innerHTML += chatBoxLiView({ text, ownerId, createdOn }, userId)
+        chatUl.scrollTo(0, chatUl.scrollHeight);
     }
-    chatUl.innerHTML += chatBoxLiView({ text, ownerId }, userId)
-    chatUl.scrollTo(0, chatUl.scrollHeight);
 });
 
 function handleDropDown(name, viewCallBack, ...params) {
@@ -47,14 +48,18 @@ function handleDropDown(name, viewCallBack, ...params) {
 }
 
 async function appendChatBox(chatId) {
+    let chatUl = document.getElementById(chatId + '-chat')
+    const chat = await get(`chats/${chatId}`)
+    if (chatUl || !chat) return
     const chatBoxDiv = document.createElement('div')
     chatBoxDiv.className = 'chatBox'
 
-    const chat = await get(`chats/${chatId}`)
     chatBoxDiv.style.right = `${openChatBoxes++ * 320 + 100}px`
 
     chatBoxDiv.innerHTML = chatBoxView(chat, userId)
     document.body.appendChild(chatBoxDiv)
+    chatUl = chatBoxDiv.children[1]
+    chatUl.scrollTo(0, chatUl.scrollHeight);
 }
 
 export function onMessageSubmit(e) {
@@ -70,4 +75,9 @@ export function onMessageKeyUp(e) {
     const chatSubmit = document.querySelector('.chatForm > button');
     if (e.target.value) chatSubmit.disabled = false
     else chatSubmit.disabled = true
+}
+
+export function onCloseMsgBox(e) {
+    e.target.parentElement.remove()
+    openChatBoxes--
 }

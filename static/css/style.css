@@ -93,6 +93,7 @@ header nav>div {
 }
 
 .chatMessages {
+    border: 1px solid rgb(195, 195, 255);
     overflow: auto;
     height: 200px;
     list-style-type: none;

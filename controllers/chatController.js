@@ -21,6 +21,7 @@ chatController.get('/', async (req, res) => {
 chatController.get('/:id', async (req, res) => {
     try {
         const chat = (await getChatById(req.params.id))
+        chat.messageIds.map(m => { m.createdOn = m.createdOn.toString(); return m })
         res.json(chat)
     } catch (error) {
         console.log(error.message);

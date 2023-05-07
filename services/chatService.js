@@ -16,6 +16,7 @@ async function addMessageToChat(chatId, ownerId, text) {
         })
         chat.messageIds.push(message._id)
         await chat.save()
+        return message
     } else throw new Error('No such chat')
 }
 

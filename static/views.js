@@ -13,7 +13,8 @@ export function chatIconView(chats) {
 }
 
 export function chatBoxView(chat, userId) {
-    return `<ul id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
+    return `<a onclick="onCloseMsgBox(event)" href="javascript:void(0)">X</a>
+    <ul id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
     <form onsubmit="onMessageSubmit(event)" class="chatForm" action="">
         <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
         <button disabled>Send</button>
@@ -21,5 +22,5 @@ export function chatBoxView(chat, userId) {
 }
 
 export function chatBoxLiView(message, userId) {
-    return `<li style="${userId == message.ownerId ? 'text-align:right;"' : 'color:blue;"'}>${message.text}</li>`
+    return `<li style="${userId == message.ownerId ? 'text-align:right;"' : 'color:blue;"'}>${message.createdOn.split(' ').slice(1, 4).join(' ')}: ${message.text}</li>`
 }

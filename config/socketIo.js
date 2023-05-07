@@ -11,8 +11,8 @@ module.exports = server => {
         socket.on('chat message', async (text, chatId) => {
             const chat = userChats.find(c => c._id == chatId)
             if (chat && chat.userIds.map(String).includes(userId)) {
-                io.to(chatId).emit('chat message', text, chatId, userId);
-                await addMessageToChat(chatId, userId, text)
+                const message = await addMessageToChat(chatId, userId, text)
+                io.to(chatId).emit('chat message', { text, chatId, ownerId: userId, createdOn: message.createdOn.toString() });
             }
         });
     });
