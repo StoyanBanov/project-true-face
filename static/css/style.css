@@ -47,3 +47,63 @@ header nav>div {
 #friendRequests {
     display: none;
 }
+
+
+
+
+.chatBox {
+    position: fixed;
+    bottom: 0px;
+    width: 300px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.chatForm {
+    background: rgba(0, 0, 0, 0.15);
+    padding: 0.25rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    height: 3rem;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+}
+
+.chatInput {
+    border: none;
+    padding: 0 1rem;
+    flex-grow: 1;
+    border-radius: 2rem;
+    margin: 0.25rem;
+}
+
+.chatInput:focus {
+    outline: none;
+}
+
+.chatInput>button {
+    background: #333;
+    border: none;
+    padding: 0 1rem;
+    margin: 0.25rem;
+    border-radius: 3px;
+    outline: none;
+    color: #fff;
+}
+
+.chatMessages {
+    overflow: auto;
+    height: 200px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chatMessages>li {
+    padding: 0.5rem 1rem;
+}
+
+.chatMessages>li:nth-child(odd) {
+    background: #efefef;
+}

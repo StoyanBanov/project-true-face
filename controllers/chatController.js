@@ -1,4 +1,4 @@
-const { getAllChatsForUser } = require('../services/chatService');
+const { getAllChatsForUser, getChatById } = require('../services/chatService');
 
 const chatController = require('express').Router()
 
@@ -12,6 +12,16 @@ chatController.get('/', async (req, res) => {
             return c
         })
         res.json(chats)
+    } catch (error) {
+        console.log(error.message);
+        res.status(404).end()
+    }
+})
+
+chatController.get('/:id', async (req, res) => {
+    try {
+        const chat = (await getChatById(req.params.id))
+        res.json(chat)
     } catch (error) {
         console.log(error.message);
         res.status(404).end()
