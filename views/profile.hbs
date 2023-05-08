@@ -1,10 +1,10 @@
 <script src="/static/scripts/profile.js" type="module"></script>
 
-<img width="100" height="100" src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png" {{/if}}>
+<img width="100" height="100" src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png{{/if}}">
 
 <form action="/profile" method="post" enctype="multipart/form-data">
-    <label for="profilePic">{{#if profilePic}}change{{else}}upload{{/if}}</label><br>
-    <input type="file" name="profilePic"><br>
+    <label for="profilePic"></label><br>
+    <input type="file" name="profilePic" value="{{#if profilePic}}change{{else}}upload{{/if}}"><br>
     <input type="submit" value="Upload"><br>
 </form>
 

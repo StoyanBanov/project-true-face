@@ -1,11 +1,15 @@
+const { getAllPosts } = require('../services/postService')
 const { getAllUsers, addFriend } = require('../services/userService')
 const { userOnly } = require('../util/guards')
 const authController = require('./authController')
 
 const homeController = require('express').Router()
 
-homeController.get('/', userOnly(), (req, res) => {
-    res.render('home')
+homeController.get('/', userOnly(), async (req, res) => {
+    const posts = await getAllPosts(req.user._id)
+    res.render('home', {
+        posts
+    })
 })
 
 homeController.get('/search', userOnly(), async (req, res) => {

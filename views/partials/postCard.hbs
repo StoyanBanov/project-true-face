@@ -1,0 +1,13 @@
+<div class="postCard" id="{{_id}}">
+    <div>
+        <img width="50" height="50"
+            src="/static/images/{{#if ownerId.profilePic}}{{ownerId.profilePic}}{{else}}profile.png{{/if}}">
+        <p>{{ownerId.username}}</p>
+    </div>
+    <p>{{text}}</p>
+    {{#if images}}
+    {{#each images}}
+    <img width="500px" height="700px" src="/static/images/{{this}}">
+    {{/each}}
+    {{/if}}
+</div>

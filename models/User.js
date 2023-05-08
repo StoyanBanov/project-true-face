@@ -10,7 +10,8 @@ const schema = new Schema({
     verified: { type: Boolean, default: false },
     friendIds: { type: [ObjectId], ref: 'User', default: [] },
     friendRequestIds: { type: [ObjectId], ref: 'User', default: [] },
-    friendPendingIds: { type: [ObjectId], ref: 'User', default: [] }
+    friendPendingIds: { type: [ObjectId], ref: 'User', default: [] },
+    settingsId: { type: ObjectId, ref: 'UserSettings' }
 })
 
 schema.index({ username: 1 }, {

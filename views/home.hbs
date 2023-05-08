@@ -1,0 +1,11 @@
+<a href="/posts/create">post</a>
+
+<div class="homePosts">
+    {{#if posts}}
+    {{#each posts}}
+    {{>postCard}}
+    {{/each}}
+    {{else}}
+    <p>No posts for you yet.</p>
+    {{/if}}
+</div>

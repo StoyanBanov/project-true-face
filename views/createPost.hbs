@@ -1,0 +1,6 @@
+<form action="/posts/create" method="post" enctype="multipart/form-data">
+    <label>Image: <input type="file" name="image"></label><br><br>
+    <label>Text: </label>
+    <textarea rows="5" cols="80" name="text">{{post.text}}</textarea><br><br>
+    <input type="submit" value="Post">
+</form>

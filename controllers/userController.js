@@ -1,4 +1,4 @@
-const image = require('../middleware/image');
+const formBody = require('../middleware/formBody');
 const { updateUserProperty } = require('../services/userService');
 const { createToken } = require('../util/jwtUtil');
 
@@ -14,10 +14,10 @@ userController.get('/current-user', (req, res) => {
     else res.json(req.user)
 })
 
-userController.post('/', image(), async (req, res) => {
+userController.post('/', formBody(), async (req, res) => {
     try {
-        await updateUserProperty(req.user._id, { profilePic: req.user.profilePic })
-        createToken(req.user, res)
+        await updateUserProperty(req.user._id, { profilePic: req.body.image })
+        createToken(Object.assign(req.user, { profilePic: req.body.image }), res)
     } catch (error) {
         console.log(error.message);
     }

@@ -5,7 +5,7 @@ const { passwordRegex } = require('../variables')
 const { guestOnly, nonVerifiedOnly } = require('../util/guards')
 const { sendConfirmationEmail } = require('../util/emailVerification')
 const { updateUserProperty } = require('../services/userService')
-const image = require('../middleware/image')
+const image = require('../middleware/formBody')
 
 const authController = require('express').Router()
 
