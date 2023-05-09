@@ -1,0 +1,14 @@
+{{#if friends}}
+<form action="/chats/create" method="post">
+    <label>name: <input type="text" name="name"></label><br>
+    <label>add friends</label><br>
+    <select name="userIds[]" multiple>
+        {{#each friends}}
+        <option value="{{_id}}">{{username}}</option>
+        {{/each}}
+    </select><br>
+    <input type="submit" value="Create">
+</form>
+{{else}}
+<p>You don't have any friends yet. Go to the <a href="/search">search</a> page and find some.</p>
+{{/if}}

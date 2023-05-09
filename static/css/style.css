@@ -9,31 +9,52 @@ header {
 }
 
 header nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
     background-color: aliceblue;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.05);
 }
 
-header nav>a,
-header nav>#headerUl,
-header nav>div {
-    display: inline;
+nav>div {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
-#profileDrop {
-    position: relative;
-    left: 60%;
+#searchNmenu {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#headerUl {
+    width: 300px;
 }
 
 #headerUl li {
     display: inline-block;
 }
 
+#profileDrop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+#profileDrop>a:nth-child(2) {
+    margin-left: 10px;
+}
+
 #dropDown {
     position: absolute;
     display: none;
-    left: 0px;
+    right: 0px;
+    top: 40px;
     width: 150px;
     height: 100px;
+    background-color: #fff;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -47,8 +68,9 @@ header nav>div {
 }
 
 #profilePic {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 #friendRequests {
@@ -59,6 +81,7 @@ header nav>div {
 
 
 .chatBox {
+    background-color: #fff;
     position: fixed;
     bottom: 0px;
     width: 300px;
@@ -115,6 +138,7 @@ header nav>div {
 
 
 
+
 .homePosts {
     display: flex;
     align-items: center;
@@ -122,6 +146,7 @@ header nav>div {
 }
 
 .postCard {
+    border-radius: 10px;
     margin-bottom: 30px;
     display: flex;
     align-items: center;

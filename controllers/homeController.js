@@ -6,7 +6,8 @@ const authController = require('./authController')
 const homeController = require('express').Router()
 
 homeController.get('/', userOnly(), async (req, res) => {
-    const posts = await getAllPosts(req.user._id)
+    const posts = (await getAllPosts(req.user._id)).map(a =>
+        Object.assign(a, { likesCount: a.likeIds.length, isLiked: a.likeIds.map(l => l.ownerId._id.toString()).includes(req.user._id) }))
     res.render('home', {
         posts
     })

@@ -18,20 +18,24 @@
 </head>
 <header>
     <nav id="mainNav">
-        <a href="/">Trueface</a>
-        <ul id="headerUl">
-            {{#if isUser}}
-            <li>
-                <form id="searchForm" action="/search" method="get">
-                    <input type="text" name="search" placeholder="search..." value="{{search}}">
-                </form>
-            </li>
-            <li><a href="/">home</a></li>
-            {{else}}
-            <li><a href="/login">login</a></li>
-            <li><a href="/register">register</a></li>
-            {{/if}}
-        </ul>
+        <div>
+            <a href="/">Trueface</a>
+        </div>
+        <div id="searchNmenu">
+            <ul id="headerUl">
+                {{#if isUser}}
+                <li>
+                    <form id="searchForm" action="/search" method="get">
+                        <input type="text" name="search" placeholder="search..." value="{{search}}">
+                    </form>
+                </li>
+                <li><a href="/">home</a></li>
+                {{else}}
+                <li><a href="/login">login</a></li>
+                <li><a href="/register">register</a></li>
+                {{/if}}
+            </ul>
+        </div>
         {{#if isUser}}
         <div id="profileDrop">
             <a id="chatIcon" href="javascript:void(0)">chat</a>

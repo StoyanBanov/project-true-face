@@ -5,7 +5,7 @@ export function profilePicView() {
 }
 
 export function chatIconView(chats) {
-    return `<a href="javascript:void(0)">create chat</a>
+    return `<a href="/chats/create">create chat</a>
             <ul>${chats.map(c => `<li>
             <img width="30" height="30" src="/static/images/${c.userIds[0].profilePic ?? 'profile.png'}">
             <a href="javascript:void(0)" id="${c._id}">${c.name}</a>

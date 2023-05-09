@@ -4,7 +4,8 @@ const schema = new Schema({
     ownerId: { type: ObjectId, ref: 'User' },
     images: { type: [String], default: [] },
     text: { type: String, maxLength: 2000 },
-    likeIds: { type: [ObjectId], ref: 'Like', default: [] }
+    likeIds: { type: [ObjectId], ref: 'Like', default: [] },
+    commentIds: { type: [ObjectId], ref: 'Comment' }
 })
 
 const Post = model('Post', schema)

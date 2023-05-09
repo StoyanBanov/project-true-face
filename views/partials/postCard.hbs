@@ -10,4 +10,12 @@
     <img width="500px" height="700px" src="/static/images/{{this}}">
     {{/each}}
     {{/if}}
+    <p>{{likesCount}}</p>
+    {{#if isLiked}}
+    <p>Liked</p>
+    {{else}}
+    {{#unless isCurrentUserPost}}
+    <a href="javascript:void(0)">Like</a>
+    {{/unless}}
+    {{/if}}
 </div>

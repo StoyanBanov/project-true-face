@@ -1,8 +1,8 @@
 const { Schema, model, Types } = require('mongoose')
 
 const schema = new Schema({
-    ownerId: { type: Types.ObjectId },
-    type: { type: String, enum: ['thumb', 'heart', 'laugh', 'anger'] }
+    ownerId: { type: Types.ObjectId, required: true },
+    type: { type: String, enum: ['thumb', 'heart', 'laugh', 'anger'], required: true }
 })
 
 const Like = model('Like', schema)

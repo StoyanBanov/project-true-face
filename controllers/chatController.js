@@ -1,4 +1,6 @@
-const { getAllChatsForUser, getChatById } = require('../services/chatService');
+const { body } = require('express-validator');
+const { getAllChatsForUser, getChatById, createChat } = require('../services/chatService');
+const { getFriends } = require('../services/userService');
 
 const chatController = require('express').Router()
 
@@ -11,18 +13,41 @@ chatController.get('/', async (req, res) => {
             }
             return c
         })
-        res.json(chats)
+        res.status(200).json(chats)
     } catch (error) {
         console.log(error.message);
         res.status(404).end()
     }
 })
 
+chatController.get('/create', async (req, res) => {
+    const { friendIds: friends } = await getFriends(req.user._id, 0)
+    res.render('createChat', {
+        friends
+    })
+})
+
+chatController.post('/create',
+    body('name').trim(),
+    body(['name', 'userIds']).isEmpty().withMessage('All fields are required!'),
+    async (req, res) => {
+        try {
+            await createChat(Object.assign(req.body, { admin: req.user._id }))
+            res.redirect('/')
+        } catch (error) {
+            console.log(error);
+            const { friendIds: friends } = await getFriends(req.user._id, 0)
+            res.render('createChat', {
+                friends
+            })
+        }
+    })
+
 chatController.get('/:id', async (req, res) => {
     try {
         const chat = (await getChatById(req.params.id))
         chat.messageIds.map(m => { m.createdOn = m.createdOn.toString(); return m })
-        res.json(chat)
+        res.status(200).json(chat)
     } catch (error) {
         console.log(error.message);
         res.status(404).end()

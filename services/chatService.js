@@ -24,8 +24,14 @@ async function getChatById(chatId) {
     return Chat.findById(chatId).populate('messageIds').lean()
 }
 
+async function createChat({ name, admin, userIds }) {
+    userIds.push(admin)
+    await Chat.create({ name, admin, userIds })
+}
+
 module.exports = {
     getAllChatsForUser,
     addMessageToChat,
-    getChatById
+    getChatById,
+    createChat
 }

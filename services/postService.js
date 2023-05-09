@@ -9,12 +9,18 @@ async function getAllPosts(userId) {
     const postsCount = await Post.count()
     const postsToReturn = []
     do {
-        let posts = await Post.find({}).where('ownerId').nin([userId]).populate({
-            path: 'ownerId',
-            populate: {
-                path: 'settingsId'
-            }
-        }).skip(skip).limit(limit).lean()
+        let posts = await Post.find({}).where('ownerId').nin([userId])
+            .populate({
+                path: 'ownerId',
+                populate: {
+                    path: 'settingsId'
+                }
+            }).populate({
+                path: 'likeIds',
+                populate: {
+                    path: 'ownerId',
+                }
+            }).skip(skip).limit(limit).lean()
         skip += limit
         postsToReturn.push(...posts.filter(p => {
             if (userPostSetting == 'all') {
@@ -37,16 +43,17 @@ async function createPost(ownerId, { text, images }) {
     })
 }
 
-async function likePost(postId, ownerId) {
-    const post = Post.findById(postId)
-    if (post.ownerId == ownerId) throw new Error('Can\'t like own posts')
-    const like = await Like.create({ ownerId })
+async function likePost({ postId, type }, ownerId) {
+    const post = await Post.findById(postId).populate('likeIds')
+    if (post.ownerId == ownerId) throw new Error('Can\'t like own posts!')
+    if (post.likeIds.some(l => l.ownerId.toString() == ownerId)) throw new Error('Already liked!')
+    const like = await Like.create({ ownerId, type })
     post.likeIds.push(like._id)
     await post.save()
 }
 
 async function removeLikePost(postId, likeId) {
-    const post = Post.findById(postId)
+    const post = await Post.findById(postId)
     post.likeIds.splice(post.likeIds.indexOf(likeId), 1)
     await Promise.all([post.save(), Like.findByIdAndDelete(likeId)])
 }

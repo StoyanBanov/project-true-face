@@ -1,6 +1,16 @@
-const { getAllUsers, requestFriendship, acceptFriendship, getFriendRequests } = require('../services/userService');
+const { getAllUsers, requestFriendship, acceptFriendship, getFriendRequests, getFriends } = require('../services/userService');
 
 const peopleController = require('express').Router()
+
+peopleController.get('/friends', async (req, res) => {
+    try {
+        const { friendIds: friends } = await getFriends(req.user._id)
+        res.status(200).json(friends)
+    } catch (error) {
+        console.log(error.message);
+        res.status(404).end()
+    }
+})
 
 peopleController.put('/request-friend', async (req, res) => {
     try {

@@ -8,20 +8,22 @@ const profilePic = document.getElementById('profilePic')
 const chatIcon = document.getElementById('chatIcon')
 const dropDown = document.getElementById('dropDown')
 let currentViewName
-let openChatBoxes = 0
+let openChatBoxes = []
 window.addEventListener('click', async (e) => {
     if (dropDown.style.display == 'block' && e.target != dropDown && e.target != profilePic && e.target != chatIcon) {
         dropDown.style.display = 'none'
     } else if (e.target == profilePic) {
         handleDropDown('profilePic', profilePicView)
+        dropDown.style.height = '60px'
     } else if (e.target == chatIcon) {
         const chats = await get('chats')
+        dropDown.style.height = chats.length * 40 + 30 + 'px'
         handleDropDown('chatView', chatIconView, chats)
     }
 })
 
 dropDown.addEventListener('click', async e => {
-    if (e.target.tagName != 'A') return
+    if (e.target.tagName != 'A' || dropDown.children[0] == e.target) return
     if (currentViewName == 'chatView') {
         e.preventDefault()
         await appendChatBox(e.target.id)
@@ -54,19 +56,25 @@ async function appendChatBox(chatId) {
     const chatBoxDiv = document.createElement('div')
     chatBoxDiv.className = 'chatBox'
 
-    chatBoxDiv.style.right = `${openChatBoxes++ * 320 + 100}px`
+    chatBoxDiv.style.right = `${openChatBoxes.length * 320 + 100}px`
+    openChatBoxes.push(chatBoxDiv)
+    if (openChatBoxes.length > 4) {
+        removeChatBox(0)
+    }
 
-    chatBoxDiv.innerHTML = chatBoxView(chat, userId)
-    document.body.appendChild(chatBoxDiv)
-    chatUl = chatBoxDiv.children[1]
-    chatUl.scrollTo(0, chatUl.scrollHeight);
+    setTimeout(() => {
+        chatBoxDiv.innerHTML = chatBoxView(chat, userId)
+        document.body.appendChild(chatBoxDiv)
+        chatUl = chatBoxDiv.children[1]
+        chatUl.scrollTo(0, chatUl.scrollHeight);
+    }, 300)
 }
 
 export function onMessageSubmit(e) {
     e.preventDefault();
     const text = Object.fromEntries((new FormData(e.target)).entries()).text
     if (text) {
-        socket.emit('chat message', text, e.target.parentElement.children[0].id.split('-')[0]);
+        socket.emit('chat message', text, getChatIdFromChatBox(e.target));
         e.target.reset()
     }
 }
@@ -79,5 +87,17 @@ export function onMessageKeyUp(e) {
 
 export function onCloseMsgBox(e) {
     e.target.parentElement.remove()
-    openChatBoxes--
+    const boxId = openChatBoxes.indexOf(e.target.parentElement)
+    removeChatBox(boxId)
+}
+
+function removeChatBox(boxId) {
+    openChatBoxes.splice(boxId, 1)[0].remove()
+    openChatBoxes.slice(boxId).forEach(box => {
+        setTimeout(() => { box.style.right = (Number(box.style.right.slice(0, -2)) - 320) + 'px' }, 300)
+    });
+}
+
+function getChatIdFromChatBox(element) {
+    return element.parentElement.children[1].id.split('-')[0]
 }

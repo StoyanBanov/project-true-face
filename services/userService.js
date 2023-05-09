@@ -39,11 +39,16 @@ async function findUserById(id) {
     return User.findById(id).lean()
 }
 
+async function getFriends(userId, skip) {
+    return User.findById(userId).select('friendIds').populate('friendIds').skip(skip * 2).limit(2).lean()
+}
+
 module.exports = {
     getAllUsers,
     updateUserProperty,
     findUserById,
     requestFriendship,
     acceptFriendship,
-    getFriendRequests
+    getFriendRequests,
+    getFriends
 }
