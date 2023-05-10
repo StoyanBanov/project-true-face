@@ -5,7 +5,7 @@ const schema = new Schema({
     images: { type: [String], default: [] },
     text: { type: String, maxLength: 2000 },
     likeIds: { type: [ObjectId], ref: 'Like', default: [] },
-    commentIds: { type: [ObjectId], ref: 'Comment' }
+    commentIds: { type: [ObjectId], ref: 'Comment', default: [] }
 })
 
 const Post = model('Post', schema)

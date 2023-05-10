@@ -14,13 +14,31 @@ export function chatIconView(chats) {
 
 export function chatBoxView(chat, userId) {
     return `<a onclick="onCloseMsgBox(event)" href="javascript:void(0)">X</a>
-    <ul id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
-    <form onsubmit="onMessageSubmit(event)" class="chatForm" action="">
-        <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
-        <button disabled>Send</button>
-    </form>`
+            <ul id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
+            <form onsubmit="onMessageSubmit(event)" class="chatForm" action="">
+                <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
+                <button disabled>Send</button>
+            </form>`
 }
 
 export function chatBoxLiView(message, userId) {
     return `<li style="${userId == message.ownerId ? 'text-align:right;"' : 'color:blue;"'}>${message.createdOn.split(' ').slice(1, 4).join(' ')}: ${message.text}</li>`
+}
+
+export function commentsView(comments) {
+    return `<div class="commentsBox">
+            <a href="javascript:void(0)">${comments.length ? `Comment</a><ul>${comments.map(c => `<li id="${c._id}">${commentLiView(c)}</li>`).join('\n')}</ul>` : 'Be the first to comment</a><ul></ul>'}
+            </div>`
+}
+
+export function commentLiView(comment) {
+    return `<img width="20" height="20" src="/static/images/${comment.ownerId.profilePic ?? 'profile.png'}">
+            <p>${comment.text}</p>`
+}
+
+export function createCommentView() {
+    return `<form onsubmit="onPostComment(event)" action="#" method="post">
+                <textarea name="text"></textarea>
+                <input type="submit" value="Comment">
+            </form>`
 }

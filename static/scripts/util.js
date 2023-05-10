@@ -10,3 +10,12 @@ export function createUserCards(users) {
     });
     return userLis
 }
+
+export function handleSubmit(callback) {
+    return (e) => {
+        e.preventDefault()
+        const data = Object.fromEntries(new FormData(e.target).entries())
+        if (Object.values(data).some(d => d.length == 0)) return
+        callback(data, e)
+    }
+}

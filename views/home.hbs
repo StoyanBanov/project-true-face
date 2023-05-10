@@ -1,4 +1,8 @@
 <script src="/static/scripts/home.js" type="module"></script>
+<script type="module">
+    import { onPostComment } from '/static/scripts/home.js'
+    window.onPostComment = onPostComment
+</script>
 
 <a href="/posts/create">post</a>
 

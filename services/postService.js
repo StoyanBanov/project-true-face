@@ -1,3 +1,4 @@
+const Comment = require("../models/Comment")
 const Like = require("../models/Like")
 const Post = require("../models/Post")
 const User = require("../models/User")
@@ -43,6 +44,7 @@ async function createPost(ownerId, { text, images }) {
     })
 }
 
+
 async function likePost({ postId, type }, ownerId) {
     const post = await Post.findById(postId).populate('likeIds')
     if (post.ownerId == ownerId) throw new Error('Can\'t like own posts!')
@@ -58,9 +60,29 @@ async function removeLikePost(postId, likeId) {
     await Promise.all([post.save(), Like.findByIdAndDelete(likeId)])
 }
 
+
+async function getPostComments(postId) {
+    return Post.findById(postId).select('commentIds').populate({
+        path: 'commentIds',
+        populate: {
+            path: 'ownerId',
+        }
+    })
+}
+
+async function commentPost({ postId, text }, ownerId) {
+    const post = await Post.findById(postId)
+    const comment = await Comment.create({ ownerId, text })
+    post.commentIds.push(comment._id)
+    await post.save()
+    return Comment.findById(comment._id).populate('ownerId')
+}
+
 module.exports = {
     getAllPosts,
     createPost,
     likePost,
-    removeLikePost
+    removeLikePost,
+    getPostComments,
+    commentPost
 }
