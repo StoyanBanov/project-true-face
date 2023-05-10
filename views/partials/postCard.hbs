@@ -1,9 +1,11 @@
 <div class="postCard" id="{{_id}}">
+    {{#unless isCurrentUserPost}}
     <div>
         <img width="50" height="50"
             src="/static/images/{{#if ownerId.profilePic}}{{ownerId.profilePic}}{{else}}profile.png{{/if}}">
         <p>{{ownerId.username}}</p>
     </div>
+    {{/unless}}
     <p>{{text}}</p>
     {{#if images}}
     {{#each images}}
@@ -13,12 +15,15 @@
         {{/if}}
         <p>{{likesCount}}</p>
         {{#if isLiked}}
-        <p>Liked</p>
+        <a href="javascript:void(0)">Liked</a>
         {{else}}
         {{#unless isCurrentUserPost}}
         <a href="javascript:void(0)">Like</a>
         {{/unless}}
         {{/if}}
         <a href="javascript:void(0)">Comments</a>
+        {{#if isCurrentUserPost}}
+        <a href="javascript:void(0)">Delete</a>
+        {{/if}}
     </div>
 </div>

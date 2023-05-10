@@ -1,6 +1,6 @@
-const { body, validationResult } = require('express-validator')
+const { body } = require('express-validator')
 const formBody = require('../middleware/formBody')
-const { createPost, likePost, getComments, commentPost, likeComment } = require('../services/postService')
+const { createPost, addLike, getComments, addComment, removeLike, deletePost } = require('../services/postService')
 
 const postController = require('express').Router()
 
@@ -24,10 +24,32 @@ postController.post('/create',
         }
     })
 
-postController.put('/likePost', async (req, res) => {
+postController.delete('/', async (req, res) => {
     try {
-        await likePost(req.body, req.user._id)
-        res.status(200)
+        await deletePost(req.query, req.user._id)
+        res.status(204)
+    } catch (error) {
+        res.statusCode = 404
+        res.statusMessage = error.message
+    }
+    res.end()
+})
+
+postController.put('/like', async (req, res) => {
+    try {
+        await addLike(req.body, req.user._id)
+        res.status(204)
+    } catch (error) {
+        res.statusCode = 404
+        res.statusMessage = error.message
+    }
+    res.end()
+})
+
+postController.put('/removeLike', async (req, res) => {
+    try {
+        await removeLike(req.body, req.user._id)
+        res.status(204)
     } catch (error) {
         res.statusCode = 404
         res.statusMessage = error.message
@@ -55,7 +77,7 @@ postController.get('/comments', async (req, res) => {
 
 postController.post('/comments', async (req, res) => {
     try {
-        const comment = await commentPost(req.body, req.user._id)
+        const comment = await addComment(req.body, req.user._id)
         res.status(201).json(Object.assign(comment, {
             likesCount: comment.likeIds.length,
             isLiked: comment.likeIds.map(l => l.ownerId.toString()).includes(req.user._id),
@@ -67,17 +89,6 @@ postController.post('/comments', async (req, res) => {
         res.statusMessage = error.message
         res.end()
     }
-})
-
-postController.put('/comments/like', async (req, res) => {
-    try {
-        await likeComment(req.body, req.user._id)
-        res.status(201)
-    } catch (error) {
-        res.statusCode = 404
-        res.statusMessage = error.message
-    }
-    res.end()
 })
 
 module.exports = postController

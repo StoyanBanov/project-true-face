@@ -44,8 +44,9 @@ export function commentLiView(comment) {
                 <p>${comment.text}</p>
                 <div class="commentActions">
                     <p>${comment.likesCount}</p>
-                    ${comment.isLiked ? `<p>Liked</p>` : !(comment.currentUserComment) ? `<a href="javascript:void(0)">Like</a>` : ''}
+                    ${!comment.currentUserComment ? `<a href="javascript:void(0)">${comment.isLiked ? `Liked` : `Like`}</a>` : ''}
                     <a href="javascript:void(0)">Comments</a>
+                    ${comment.currentUserComment ? '<a href="javascript:void(0)">Delete</a>' : ''}
                 </div>
             </div>`
 }
@@ -55,4 +56,8 @@ export function createCommentView() {
                 <textarea name="text"></textarea>
                 <input type="submit" value="Comment">
             </form>`
+}
+
+export function name(params) {
+
 }

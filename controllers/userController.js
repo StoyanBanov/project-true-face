@@ -1,11 +1,18 @@
 const formBody = require('../middleware/formBody');
+const { getUserPosts } = require('../services/postService');
 const { updateUserProperty } = require('../services/userService');
 const { createToken } = require('../util/jwtUtil');
 
 const userController = require('express').Router()
 
-userController.get('/', (req, res) => {
-    res.render('profile', req.user)
+userController.get('/', async (req, res) => {
+    const posts = (await getUserPosts(req.user._id)).map(a =>
+        Object.assign(a, {
+            likesCount: a.likeIds.length,
+            isLiked: a.likeIds.map(l => l.ownerId._id.toString()).includes(req.user._id),
+            isCurrentUserPost: true
+        }))
+    res.render('profile', Object.assign(req.user, { posts }))
 })
 
 userController.get('/current-user', (req, res) => {

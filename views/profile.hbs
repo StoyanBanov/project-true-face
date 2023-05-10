@@ -11,3 +11,11 @@
 <a id="showRequests" href="javascript:void(0)">Friendship requests</a>
 <ul id="friendRequests">
 </ul>
+
+{{#if posts}}
+<div class="profilePosts">
+    {{#each posts}}
+    {{>postCard}}
+    {{/each}}
+</div>
+{{/if}}
