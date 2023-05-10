@@ -61,21 +61,51 @@ async function removeLikePost(postId, likeId) {
 }
 
 
-async function getPostComments(postId) {
-    return Post.findById(postId).select('commentIds').populate({
-        path: 'commentIds',
-        populate: {
-            path: 'ownerId',
-        }
-    })
+async function getComments({ postId, commentId }) {
+    if (postId)
+        return Post.findById(postId).select('commentIds').populate({
+            path: 'commentIds',
+            populate: {
+                path: 'ownerId',
+            },
+            populate: {
+                path: 'likeIds'
+            }
+        }).lean()
+    if (commentId)
+        return Comment.findById(commentId).select('commentIds').populate({
+            path: 'commentIds',
+            populate: {
+                path: 'ownerId',
+            },
+            populate: {
+                path: 'likeIds'
+            }
+        }).lean()
 }
 
-async function commentPost({ postId, text }, ownerId) {
-    const post = await Post.findById(postId)
-    const comment = await Comment.create({ ownerId, text })
-    post.commentIds.push(comment._id)
-    await post.save()
-    return Comment.findById(comment._id).populate('ownerId')
+async function commentPost({ commentId, postId, text }, ownerId) {
+    let commentedOn
+    let comment
+    if (postId) {
+        commentedOn = await Post.findById(postId)
+        comment = await Comment.create({ ownerId, text })
+    } else if (commentId) {
+        commentedOn = await Comment.findById(commentId)
+        comment = await Comment.create({ ownerId, text })
+    }
+    commentedOn.commentIds.push(comment._id)
+    await commentedOn.save()
+    return Comment.findById(comment._id).populate('ownerId').populate('likeIds').lean()
+}
+
+async function likeComment({ commentId, type }, ownerId) {
+    const comment = await Comment.findById(commentId).populate('likeIds')
+    if (comment.ownerId == ownerId) throw new Error('Can\'t like own comments!')
+    if (comment.likeIds.some(l => l.ownerId.toString() == ownerId)) throw new Error('Already liked!')
+    const like = await Like.create({ ownerId, type })
+    comment.likeIds.push(like._id)
+    await comment.save()
 }
 
 module.exports = {
@@ -83,6 +113,7 @@ module.exports = {
     createPost,
     likePost,
     removeLikePost,
-    getPostComments,
-    commentPost
+    getComments,
+    commentPost,
+    likeComment
 }

@@ -27,13 +27,27 @@ export function chatBoxLiView(message, userId) {
 
 export function commentsView(comments) {
     return `<div class="commentsBox">
-            <a href="javascript:void(0)">${comments.length ? `Comment</a><ul>${comments.map(c => `<li id="${c._id}">${commentLiView(c)}</li>`).join('\n')}</ul>` : 'Be the first to comment</a><ul></ul>'}
+            <a href="javascript:void(0)">${comments.length
+            ? `Comment</a><ul style="height:200px;">${comments.map(c => `<li>${commentLiView(c)}</li>`).join('\n')}</ul>`
+            : 'Be the first to comment</a><ul></ul>'}
             </div>`
 }
 
 export function commentLiView(comment) {
-    return `<img width="20" height="20" src="/static/images/${comment.ownerId.profilePic ?? 'profile.png'}">
-            <p>${comment.text}</p>`
+    const textArr = comment.text.split('')
+    comment.text = ''
+    while (textArr.length > 0) {
+        comment.text += textArr.splice(0, 72).join('') + '\n'
+    }
+    return `<div id="${comment._id}" class="commentContent">
+                <img width="20" height="20" src="/static/images/${comment.ownerId.profilePic ?? 'profile.png'}">
+                <p>${comment.text}</p>
+                <div class="commentActions">
+                    <p>${comment.likesCount}</p>
+                    ${comment.isLiked ? `<p>Liked</p>` : !(comment.currentUserComment) ? `<a href="javascript:void(0)">Like</a>` : ''}
+                    <a href="javascript:void(0)">Comments</a>
+                </div>
+            </div>`
 }
 
 export function createCommentView() {
