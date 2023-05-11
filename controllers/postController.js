@@ -15,7 +15,7 @@ postController.post('/create',
         try {
             if (!req.body.text && !req.body.image) throw new Error('Add text and/or an image to create a post!')
             await createPost(req.user._id, { text: req.body.text, images: [req.body.image] })
-            res.redirect('/')
+            res.redirect('/profile')
         } catch (error) {
             res.render('createPost', {
                 post: req.body

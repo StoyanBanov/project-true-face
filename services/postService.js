@@ -65,9 +65,9 @@ async function deletePost({ postId, commentId }, ownerId) {
     }
     if (toBeDeleted.ownerId != ownerId) throw new Error('This item is not yours!')
 
-    await Promise.all([Comment.deleteMany({ '_id': { $in: toBeDeleted.commentIds } }), Like.deleteMany({ '_id': { $in: toBeDeleted.likeIds } })])
+    //await Promise.all([Comment.deleteMany({ '_id': { $in: toBeDeleted.commentIds } }), Like.deleteMany({ '_id': { $in: toBeDeleted.likeIds } })])
     if (postId) {
-        await Post.findByIdAndDelete(postId)
+        await Post.findOneAndDelete({ _id: postId })
     } else if (commentId) {
         await Comment.findByIdAndDelete(commentId)
     }
@@ -75,8 +75,8 @@ async function deletePost({ postId, commentId }, ownerId) {
 
 async function addLike({ commentId, postId, type }, ownerId) {
     let liked
-    if (postId) liked = await Post.findById(postId)
-    else if (commentId) liked = await Comment.findById(commentId)
+    if (postId) liked = await Post.findById(postId).populate('likeIds')
+    else if (commentId) liked = await Comment.findById(commentId).populate('likeIds')
 
     if (liked.ownerId == ownerId) throw new Error('Can\'t like own posts!')
     if (liked.likeIds.some(l => l.ownerId.toString() == ownerId)) throw new Error('Already liked!')

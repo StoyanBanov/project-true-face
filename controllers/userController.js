@@ -1,5 +1,5 @@
 const formBody = require('../middleware/formBody');
-const { getUserPosts } = require('../services/postService');
+const { getUserPosts, deletePost } = require('../services/postService');
 const { updateUserProperty } = require('../services/userService');
 const { createToken } = require('../util/jwtUtil');
 
@@ -13,6 +13,11 @@ userController.get('/', async (req, res) => {
             isCurrentUserPost: true
         }))
     res.render('profile', Object.assign(req.user, { posts }))
+})
+
+userController.get('/deletePost/:postId', async (req, res) => {
+    await deletePost(req.params, req.user._id)
+    res.redirect('/profile')
 })
 
 userController.get('/current-user', (req, res) => {
