@@ -65,7 +65,6 @@ async function deletePost({ postId, commentId }, ownerId) {
     }
     if (toBeDeleted.ownerId != ownerId) throw new Error('This item is not yours!')
 
-    //await Promise.all([Comment.deleteMany({ '_id': { $in: toBeDeleted.commentIds } }), Like.deleteMany({ '_id': { $in: toBeDeleted.likeIds } })])
     if (postId) {
         await Post.findOneAndDelete({ _id: postId })
     } else if (commentId) {

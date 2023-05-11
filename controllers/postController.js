@@ -10,7 +10,6 @@ postController.get('/create', (req, res) => {
 
 postController.post('/create',
     formBody(),
-    body('text').trim(),
     async (req, res) => {
         try {
             if (!req.body.text && !req.body.image) throw new Error('Add text and/or an image to create a post!')
@@ -19,7 +18,6 @@ postController.post('/create',
         } catch (error) {
             res.render('createPost', {
                 post: req.body
-
             })
         }
     })

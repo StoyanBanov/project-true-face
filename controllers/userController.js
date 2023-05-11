@@ -15,6 +15,16 @@ userController.get('/', async (req, res) => {
     res.render('profile', Object.assign(req.user, { posts }))
 })
 
+userController.post('/', formBody(), async (req, res) => {
+    try {
+        await updateUserProperty(req.user._id, { profilePic: req.body.profilePic })
+        createToken(Object.assign(req.user, { profilePic: req.body.profilePic }), res)
+    } catch (error) {
+        console.log(error.message);
+    }
+    res.redirect('/profile')
+})
+
 userController.get('/deletePost/:postId', async (req, res) => {
     await deletePost(req.params, req.user._id)
     res.redirect('/profile')
@@ -24,16 +34,6 @@ userController.get('/current-user', (req, res) => {
     const select = req.query.select
     if (select) res.json(req.user[select])
     else res.json(req.user)
-})
-
-userController.post('/', formBody(), async (req, res) => {
-    try {
-        await updateUserProperty(req.user._id, { profilePic: req.body.image })
-        createToken(Object.assign(req.user, { profilePic: req.body.image }), res)
-    } catch (error) {
-        console.log(error.message);
-    }
-    res.redirect('profile')
 })
 
 module.exports = userController
