@@ -1,7 +1,7 @@
 <div class="postCard" id="{{_id}}">
     {{#unless isCurrentUserPost}}
     <div>
-        <img width="50" height="50"
+        <img class="postProfilePic" width="50" height="50"
             src="/static/images/{{#if ownerId.profilePic}}{{ownerId.profilePic}}{{else}}profile.png{{/if}}">
         <p>{{ownerId.username}}</p>
     </div>

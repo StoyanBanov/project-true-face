@@ -4,17 +4,14 @@ module.exports = () => (req, res, next) => {
     req.body = {}
     let rawBodyArr = []
     let currentData = ''
-    let currentProperty = []
     const boundary = req.headers['content-type'].split('boundary=')[1].trim()
     req.on('data', chunk => {
         rawBodyArr.push(chunk.toString('binary'))
     })
     req.on('end', async () => {
         currentData = rawBodyArr.join('')
-        let lengthToRemove = 0
         while (currentData.includes(boundary) && currentData.includes(boundary, currentData.indexOf(boundary) + 1)) {
-            currentProperty = currentData.slice(currentData.indexOf(boundary), currentData.indexOf(boundary, currentData.indexOf(boundary) + 1))
-            lengthToRemove += currentProperty.length
+            const currentProperty = currentData.slice(currentData.indexOf(boundary), currentData.indexOf(boundary, currentData.indexOf(boundary) + 1))
             const fieldName = /name="([^"]*)/.exec(currentProperty.slice(currentProperty.indexOf('\n', currentProperty.indexOf(boundary))))[1]
             const lineIndex = currentProperty.indexOf('\n')
             const rawData = currentProperty.slice(lineIndex)
@@ -36,11 +33,10 @@ module.exports = () => (req, res, next) => {
                 }
             } catch (error) {
                 if (match) {
-                    const data = rawData.slice(match.index).trim()
-                    req.body[fieldName] = data.slice(0, -2).trim()
+                    req.body[fieldName] = rawData.slice(match.index, - 2).trim()
                 }
             }
-            currentData = currentData.slice(lengthToRemove)
+            currentData = currentData.slice(currentProperty.length)
         }
         next()
     });

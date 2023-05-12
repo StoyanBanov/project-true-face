@@ -1,0 +1,19 @@
+<script src="/static/scripts/settings.js" type="module"></script>
+
+<div>
+    <p>Who can see my posts: <select id="myPostsSelect">
+            {{#each myPostsSelect}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
+            {{/each}}
+        </select>
+    </p>
+
+    <p>I see posts from: <select id="othersPostsSelect">
+            {{#each othersPostsSelect}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
+            {{/each}}
+        </select>
+    </p>
+
+    <a href="/profile/delete">Remove profile</a>
+</div>

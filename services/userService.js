@@ -5,6 +5,10 @@ async function getAllUsers(currentId, { search }, skip) {
     return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).skip(skip * 2).limit(2).lean()
 }
 
+async function getUserAndSettings(id) {
+    return User.findById(id).populate('settingsId').lean()
+}
+
 async function updateUserProperty(id, property) {
     await User.findByIdAndUpdate(id, { $set: property })
 }
@@ -45,6 +49,7 @@ async function getFriends(userId, skip) {
 
 module.exports = {
     getAllUsers,
+    getUserAndSettings,
     updateUserProperty,
     findUserById,
     requestFriendship,

@@ -1,6 +1,6 @@
 const formBody = require('../middleware/formBody');
 const { getUserPosts, deletePost } = require('../services/postService');
-const { updateUserProperty } = require('../services/userService');
+const { updateUserProperty, getUserAndSettings } = require('../services/userService');
 const { createToken } = require('../util/jwtUtil');
 
 const userController = require('express').Router()
@@ -23,6 +23,21 @@ userController.post('/', formBody(), async (req, res) => {
         console.log(error.message);
     }
     res.redirect('/profile')
+})
+
+userController.get('/settings', async (req, res) => {
+    const user = await getUserAndSettings(req.user._id)
+    user.myPostsSelect = [
+        { value: 'all', selected: user.settingsId.seeMyPosts == 'all' },
+        { value: 'friends', selected: user.settingsId.seeMyPosts == 'friends' },
+        { value: 'me', selected: user.settingsId.seeMyPosts == 'me' }
+    ]
+    user.othersPostsSelect = [
+        { value: 'all', selected: user.settingsId.postsISee == 'all' },
+        { value: 'friends', selected: user.settingsId.postsISee == 'friends' },
+        { value: 'none', selected: user.settingsId.postsISee == 'none' }
+    ]
+    res.render('settings', user)
 })
 
 userController.get('/deletePost/:postId', async (req, res) => {
