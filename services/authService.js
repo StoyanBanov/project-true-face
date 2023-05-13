@@ -1,6 +1,6 @@
 const User = require("../models/User")
 const bcrypt = require('bcrypt')
-const UserSettings = require("../models/userSettings")
+const UserSettings = require("../models/UserSettings")
 
 async function register(userData = { username, email, password, image, gender }) {
     return User.create(Object.assign(userData, { password: await bcrypt.hash(userData.password, 10), settingsId: (await UserSettings.create({}))._id }))

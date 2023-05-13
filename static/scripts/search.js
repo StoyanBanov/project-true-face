@@ -19,7 +19,7 @@ window.addEventListener('scroll', async e => {
 usersList.addEventListener('click', async e => {
     if (e.target.tagName != 'A') return
     const li = e.target.parentElement
-
+    e.target.remove()
     if (e.target.textContent == 'Add') {
         await put('people/request-friend', { friendId: li.id })
         li.innerHTML += `<p>Friendship requested</p>`
@@ -27,8 +27,6 @@ usersList.addEventListener('click', async e => {
         await put('people/accept-friend', { friendId: li.id })
         li.innerHTML += `<p>friends</p>`
     }
-
-    e.target.remove()
 })
 
 async function getUsers() {

@@ -8,7 +8,11 @@
     {{#if isRequested}}
     <a href="javascript:void(0)">Accept</a>
     {{else}}
+    {{#if isPending}}
+    <a href="javascript:void(0)">Remove request</a>
+    {{else}}
     <a href="javascript:void(0)">Add</a>
+    {{/if}}
     {{/if}}
     {{/if}}
 </li>

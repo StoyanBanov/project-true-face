@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const schema = new Schema({
     seeMyPosts: { type: String, enum: ['all', 'friends', 'me'], default: 'all' },

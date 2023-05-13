@@ -1,5 +1,6 @@
 const Chat = require("../models/Chat")
 const User = require("../models/User")
+const UserSettings = require("../models/UserSettings")
 
 async function getAllUsers(currentId, { search }, skip) {
     return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).skip(skip * 2).limit(2).lean()
@@ -11,6 +12,14 @@ async function getUserAndSettings(id) {
 
 async function updateUserProperty(id, property) {
     await User.findByIdAndUpdate(id, { $set: property })
+}
+
+async function updateUser(id, { seeMyPosts, postsISee }) {
+    const user = await User.findById(id)
+    const settings = await UserSettings.findById(user.settingsId)
+    settings.seeMyPosts = seeMyPosts
+    settings.postsISee = postsISee
+    await Promise.all(user.save(), settings.save())
 }
 
 async function requestFriendship(userId, friendId) {
@@ -47,13 +56,19 @@ async function getFriends(userId, skip) {
     return User.findById(userId).select('friendIds').populate('friendIds').skip(skip * 2).limit(2).lean()
 }
 
+async function deleteUser(id) {
+    await User.deleteOne({ _id: id })
+}
+
 module.exports = {
     getAllUsers,
     getUserAndSettings,
     updateUserProperty,
+    updateUser,
     findUserById,
     requestFriendship,
     acceptFriendship,
     getFriendRequests,
-    getFriends
+    getFriends,
+    deleteUser
 }

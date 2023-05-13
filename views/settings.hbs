@@ -1,19 +1,20 @@
-<script src="/static/scripts/settings.js" type="module"></script>
-
 <div>
-    <p>Who can see my posts: <select id="myPostsSelect">
-            {{#each myPostsSelect}}
-            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
-            {{/each}}
-        </select>
-    </p>
-
-    <p>I see posts from: <select id="othersPostsSelect">
-            {{#each othersPostsSelect}}
-            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
-            {{/each}}
-        </select>
-    </p>
-
+    <form action="/profile/settings" method="post">
+        <label>Who can see my posts: <select name="seeMyPosts" id="myPostsSelect">
+                {{#each myPostsSelect}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
+                {{/each}}
+            </select>
+        </label>
+        <br><br>
+        <label>I see posts from: <select name="postsISee" id="othersPostsSelect">
+                {{#each othersPostsSelect}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
+                {{/each}}
+            </select>
+        </label>
+        <br><br>
+        <input type="submit" value="Save changes">
+    </form><br><br>
     <a href="/profile/delete">Remove profile</a>
 </div>

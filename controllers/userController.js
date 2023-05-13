@@ -1,6 +1,7 @@
+const { body } = require('express-validator');
 const formBody = require('../middleware/formBody');
 const { getUserPosts, deletePost } = require('../services/postService');
-const { updateUserProperty, getUserAndSettings } = require('../services/userService');
+const { updateUserProperty, getUserAndSettings, updateUser, deleteUser } = require('../services/userService');
 const { createToken } = require('../util/jwtUtil');
 
 const userController = require('express').Router()
@@ -25,6 +26,21 @@ userController.post('/', formBody(), async (req, res) => {
     res.redirect('/profile')
 })
 
+userController.delete('/', async (req, res) => {
+    try {
+        await deleteUser(req.user._id)
+        res.clearCookie('jwt')
+        res.status(204)
+    } catch (error) {
+        console.log(error);
+    }
+    res.end()
+})
+
+userController.get('/delete', async (req, res) => {
+    res.render('deleteProfile')
+})
+
 userController.get('/settings', async (req, res) => {
     const user = await getUserAndSettings(req.user._id)
     user.myPostsSelect = [
@@ -38,6 +54,25 @@ userController.get('/settings', async (req, res) => {
         { value: 'none', selected: user.settingsId.postsISee == 'none' }
     ]
     res.render('settings', user)
+})
+
+userController.post('/settings', async (req, res) => {
+    body(['seeMyPosts', 'postsISee']).trim()
+    try {
+        await updateUser(req.user._id, req.body)
+    } catch (error) {
+        req.body.myPostsSelect = [
+            { value: 'all', selected: req.body.seeMyPosts == 'all' },
+            { value: 'friends', selected: req.body.seeMyPosts == 'friends' },
+            { value: 'me', selected: req.body.seeMyPosts == 'me' }
+        ]
+        req.body.othersPostsSelect = [
+            { value: 'all', selected: req.body.postsISee == 'all' },
+            { value: 'friends', selected: req.body.postsISee == 'friends' },
+            { value: 'none', selected: req.body.postsISee == 'none' }
+        ]
+        res.render('settings', req.body)
+    }
 })
 
 userController.get('/deletePost/:postId', async (req, res) => {

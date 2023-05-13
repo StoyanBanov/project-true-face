@@ -21,6 +21,30 @@ schema.pre('findOneAndDelete', { document: false, query: true }, async function 
     await Promise.all([Comment.deleteMany({ '_id': { $in: post.commentIds } }), Like.deleteMany({ '_id': { $in: post.likeIds } })])
 })
 
+schema.pre('deleteMany', { document: false, query: true }, async function () {
+    const posts = await this.model.find(this.getFilter())
+    if (posts) {
+        const comments = posts.map(p => p.commentIds).reduce((allCom, com) => {
+            allCom.push(...com)
+            return allCom
+        }, [])
+        const likes = posts.map(p => p.likeIds).reduce((allLi, li) => {
+            allLi.push(...li)
+            return allLi
+        }, [])
+        const images = posts.map(p => p.images).reduce((allIm, im) => {
+            allIm.push(...im)
+            return allIm
+        }, [])
+        for (const imgName of images) {
+            fs.unlink(`./static/images/${imgName}`, (err) => {
+                if (err) console.log(err);
+            })
+        }
+        await Promise.all([Comment.deleteMany({ '_id': { $in: comments } }), Like.deleteMany({ '_id': { $in: likes } })])
+    }
+})
+
 const Post = model('Post', schema)
 
 module.exports = Post

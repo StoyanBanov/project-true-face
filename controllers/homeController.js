@@ -31,7 +31,6 @@ homeController.get('/search', userOnly(), async (req, res) => {
 
 homeController.get('/logout', userOnly(), (req, res) => {
     res.clearCookie('jwt')
-    res.clearCookie('userId')
     res.redirect('/login')
 })
 

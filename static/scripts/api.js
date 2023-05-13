@@ -11,9 +11,10 @@ async function request(method, url, body) {
     }
     try {
         const response = await fetch(host + url, options)
-        if (!response.ok) throw new Error(response.message)
         try {
-            return await response.json()
+            const body = await response.json()
+            if (!response.ok) throw new Error(body.message)
+            return body
         } catch (error) {
             return false
         }

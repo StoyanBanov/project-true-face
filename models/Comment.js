@@ -14,19 +14,22 @@ schema.pre('deleteMany', { document: false, query: true }, async function () {
         allIds.push(...curIds)
         return allIds
     }, [])
+    const likes = comments.map(c => c.likeIds).reduce((allIds, curIds) => {
+        allIds.push(...curIds)
+        return allIds
+    }, [])
     if (subCommentIds.length > 0)
-        await Promise.all([this.model.deleteMany({
+        await this.model.deleteMany({
             '_id': {
                 $in: subCommentIds
             }
-        }), Like.deleteMany({
+        })
+    if (subCommentIds.length > 0)
+        Like.deleteMany({
             '_id': {
-                $in: comments.map(c => c.likeIds).reduce((allIds, curIds) => {
-                    allIds.push(...curIds)
-                    return allIds
-                }, [])
+                $in: likes
             }
-        })])
+        })
 })
 
 schema.pre('findOneAndDelete', { document: false, query: true }, async function () {
