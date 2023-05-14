@@ -9,13 +9,13 @@ chatController.get('/', async (req, res) => {
         const chats = (await getAllChatsForUser(req.user._id)).map(c => {
             if (!c.name) {
                 c.userIds.splice(c.userIds.findIndex(u => u._id == req.user._id), 1)
-                c.name = c.userIds[0].username
+                if (c.userIds[0]) c.name = c.userIds[0].username
             }
             return c
         })
         res.status(200).json(chats)
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.status(404).end()
     }
 })
