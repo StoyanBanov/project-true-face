@@ -3,7 +3,7 @@ const User = require("../models/User")
 const UserSettings = require("../models/UserSettings")
 
 async function getAllUsers(currentId, { search }, skip) {
-    return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).skip(skip * 2).limit(2).lean()
+    return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).skip(skip * 10).limit(10).lean()
 }
 
 async function getUserAndSettings(id) {

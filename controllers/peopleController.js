@@ -35,7 +35,7 @@ peopleController.get('/request-friend', async (req, res) => {
 })
 
 peopleController.get('/:skip', async (req, res) => {
-    const users = (await getAllUsers(req.user._id, req.query, 0)).map(u => Object.assign(u, {
+    const users = (await getAllUsers(req.user._id, req.query, req.params.skip)).map(u => Object.assign(u, {
         friendsCount: u.friendIds.length,
         isFriend: u.friendIds.map(String).includes(req.user._id),
         isPending: u.friendRequestIds.map(String).includes(req.user._id),

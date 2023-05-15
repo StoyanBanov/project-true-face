@@ -1,4 +1,4 @@
-import { profilePicView, chatIconView, chatBoxView, chatBoxLiView } from "/static/views.js"
+import { profilePicView, chatIconView, chatIconViewLi, chatBoxView, chatBoxLiView } from "/static/views.js"
 import { get } from "/static/scripts/api.js"
 
 const userId = await get('profile/current-user?select=_id')
@@ -9,15 +9,18 @@ const chatIcon = document.getElementById('chatIcon')
 const dropDown = document.getElementById('dropDown')
 let currentViewName
 let openChatBoxes = []
+let skip = 0
 window.addEventListener('click', async (e) => {
-    if (dropDown.style.display == 'block' && e.target != dropDown && e.target != profilePic && e.target != chatIcon) {
+    if (dropDown.style.display == 'flex' && e.target != dropDown && e.target != profilePic && e.target != chatIcon) {
         dropDown.style.display = 'none'
+        skip = 0
     } else if (e.target == profilePic) {
         handleDropDown('profilePic', profilePicView)
         dropDown.style.height = '60px'
     } else if (e.target == chatIcon) {
-        const chats = await get('chats')
-        dropDown.style.height = chats.length * 40 + 30 + 'px'
+        const chats = await get('chats/' + skip++)
+        if (chats.length * 34 + 33 < window.innerHeight) dropDown.style.height = chats.length * 34 + 33 + 'px'
+        else dropDown.style.height = window.innerHeight - 100 + 'px'
         handleDropDown('chatView', chatIconView, chats)
     }
 })
@@ -42,11 +45,14 @@ socket.on('chat message', async ({ text, chatId, ownerId, createdOn }) => {
 });
 
 function handleDropDown(name, viewCallBack, ...params) {
-    if (dropDown.style.display != 'block' || currentViewName != name) {
-        dropDown.style.display = 'block'
+    if (dropDown.style.display != 'flex' || currentViewName != name) {
+        dropDown.style.display = 'flex'
         dropDown.innerHTML = viewCallBack(...params)
         currentViewName = name
-    } else if (currentViewName == name) dropDown.style.display = 'none'
+    } else if (currentViewName == name) {
+        dropDown.style.display = 'none'
+        skip = 0
+    }
 }
 
 async function appendChatBox(chatId) {
@@ -70,7 +76,7 @@ async function appendChatBox(chatId) {
     }, 300)
 }
 
-export function onMessageSubmit(e) {
+window.onMessageSubmit = e => {
     e.preventDefault();
     const text = Object.fromEntries((new FormData(e.target)).entries()).text
     if (text) {
@@ -79,16 +85,23 @@ export function onMessageSubmit(e) {
     }
 }
 
-export function onMessageKeyUp(e) {
+window.onMessageKeyUp = e => {
     const chatSubmit = document.querySelector('.chatForm > button');
     if (e.target.value) chatSubmit.disabled = false
     else chatSubmit.disabled = true
 }
 
-export function onCloseMsgBox(e) {
+window.onCloseMsgBox = e => {
     e.target.parentElement.remove()
     const boxId = openChatBoxes.indexOf(e.target.parentElement)
     removeChatBox(boxId)
+}
+
+window.onChatDropScroll = async e => {
+    if (e.target.children[e.target.children.length - 1].getBoundingClientRect().bottom + window.pageYOffset == e.target.getBoundingClientRect().bottom + window.pageYOffset) {
+        const chats = await get('chats/' + skip++)
+        e.target.innerHTML += chats.map(chatIconViewLi).join('\n')
+    }
 }
 
 function removeChatBox(boxId) {

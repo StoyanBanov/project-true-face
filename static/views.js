@@ -6,10 +6,14 @@ export function profilePicView() {
 
 export function chatIconView(chats) {
     return `<a href="/chats/create">create chat</a>
-            <ul>${chats.map(c => `<li>
+            <ul onscroll="onChatDropScroll(event)" class="chatDropdownUl">${chats.map(chatIconViewLi).join('\n')}</ul>`
+}
+
+export function chatIconViewLi(c) {
+    return `<li>
             <img width="30" height="30" src="/static/images/${c.userIds[0] && c.userIds[0].profilePic ? c.userIds[0].profilePic : 'profile.png'}">
             <a href="javascript:void(0)" id="${c._id}">${c.name ?? 'former user'}</a>
-            </li>`).join('\n')}</ul>`
+            </li>`
 }
 
 export function chatBoxView(chat, userId) {

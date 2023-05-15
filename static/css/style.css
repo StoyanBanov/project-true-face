@@ -50,9 +50,10 @@ nav>div {
 #dropDown {
     position: absolute;
     display: none;
+    flex-direction: column;
     right: 0px;
     top: 40px;
-    width: 150px;
+    width: 200px;
     height: 100px;
     background-color: #fff;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -79,6 +80,13 @@ nav>div {
 
 
 
+
+.chatDropdownUl {
+    padding-left: 20px;
+    list-style-type: none;
+    overflow: auto;
+    margin-bottom: 0;
+}
 
 .chatBox {
     background-color: #fff;

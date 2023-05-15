@@ -1,9 +1,9 @@
 const Chat = require("../models/Chat");
 const Message = require("../models/Message");
 
-async function getAllChatsForUser(userId, select) {
-    if (select) return Chat.find({ userIds: userId }).select(select).lean()
-    return Chat.find({ userIds: userId }).populate('userIds').lean()
+async function getAllChatsForUser({ userId, select, skip }) {
+    if (select) return Chat.find({ userIds: userId }).select(select).skip(skip * 10).limit(10).lean()
+    return Chat.find({ userIds: userId }).populate('userIds').skip(skip * 10).limit(10).lean()
 }
 
 async function addMessageToChat(chatId, ownerId, text) {

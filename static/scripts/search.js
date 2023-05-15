@@ -2,17 +2,11 @@ import { createUserCards } from "/static/scripts/util.js"
 import { get, put } from "/static/scripts/api.js"
 const usersList = document.getElementById('usersList')
 let skip = 1
-let scrolledCount = 0
-let scrollYPrev = 0
-let users
+let users = []
 
 window.addEventListener('scroll', async e => {
-    if (users.length > 0 && scrollYPrev < window.scrollY) {
-        scrolledCount++
-        scrollYPrev = window.scrollY
-        if (scrolledCount % 45 == 0) {
-            getUsers()
-        }
+    if (usersList.children[usersList.children.length - 1].getBoundingClientRect().bottom - window.innerHeight <= 0) {
+        getUsers()
     }
 })
 
@@ -30,7 +24,7 @@ usersList.addEventListener('click', async e => {
 })
 
 async function getUsers() {
-    users = await get('people/' + skip)
+    users = await get('people/' + skip++)
     usersList.append(...createUserCards(users))
-    skip++
+    console.log(skip);
 }
