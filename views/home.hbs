@@ -6,7 +6,7 @@
 
 <a id="createPostA" href="/posts/create">post</a>
 
-<div class="homePosts">
+<ul class="homePosts">
     {{#if posts}}
     {{#each posts}}
     {{>postCard}}
@@ -14,4 +14,4 @@
     {{else}}
     <p>No posts for you yet.</p>
     {{/if}}
-</div>
+</ul>

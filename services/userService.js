@@ -45,7 +45,7 @@ async function acceptFriendship(userId, friendId) {
 }
 
 async function getFriendRequests(userId, skip) {
-    return User.findById(userId).select('friendRequestIds').populate('friendRequestIds').skip(skip * 2).limit(2).lean()
+    return User.findById(userId).select('friendRequestIds').populate('friendRequestIds').skip(skip * 10).limit(10).lean()
 }
 
 async function findUserById(id) {
@@ -53,7 +53,7 @@ async function findUserById(id) {
 }
 
 async function getFriends(userId, skip) {
-    return User.findById(userId).select('friendIds').populate('friendIds').skip(skip * 2).limit(2).lean()
+    return User.findById(userId).select('friendIds').populate('friendIds').skip(skip * 10).limit(10).lean()
 }
 
 async function deleteUser(id) {

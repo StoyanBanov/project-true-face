@@ -4,7 +4,8 @@ const peopleController = require('express').Router()
 
 peopleController.get('/friends', async (req, res) => {
     try {
-        const { friendIds: friends } = await getFriends(req.user._id)
+        const { friendIds: friends } = (await getFriends(req.user._id, req.query.skip)) ?? { friendIds: [] }
+        friends.map(u => Object.assign(u, { friendsCount: u.friendIds.length, isFriend: true }))
         res.status(200).json(friends)
     } catch (error) {
         console.log(error.message);
@@ -25,7 +26,7 @@ peopleController.put('/request-friend', async (req, res) => {
 
 peopleController.get('/request-friend', async (req, res) => {
     try {
-        const { friendRequestIds: friendRequests } = await getFriendRequests(req.user._id)
+        const { friendRequestIds: friendRequests } = (await getFriendRequests(req.user._id, req.query.skip)) ?? { friendRequestIds: [] }
         friendRequests.map(u => Object.assign(u, { friendsCount: u.friendIds.length, isRequested: true }))
         res.status(200).json(friendRequests)
     } catch (error) {

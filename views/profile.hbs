@@ -8,14 +8,15 @@
     <input type="submit" value="Upload"><br>
 </form>
 
-<a id="showRequests" href="javascript:void(0)">Friendship requests</a>
-<ul id="friendRequests">
-</ul>
-
-{{#if posts}}
-<div class="profilePosts">
+<div id="profileListOptions">
+    <a id="showRequests" href="javascript:void(0)">Friendship requests</a>
+    <a id="showFriends" href="javascript:void(0)">Friends</a>
+    <a id="showPosts" href="javascript:void(0)">My posts</a>
+</div>
+<ul id="profileList">
+    {{#if posts}}
     {{#each posts}}
     {{>postCard}}
     {{/each}}
-</div>
-{{/if}}
+    {{/if}}
+</ul>

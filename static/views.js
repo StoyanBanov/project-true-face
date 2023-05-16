@@ -18,7 +18,7 @@ export function chatIconViewLi(c) {
 
 export function chatBoxView(chat, userId) {
     return `<a onclick="onCloseMsgBox(event)" href="javascript:void(0)">X</a>
-            <ul id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
+            <ul onscroll="onChatBoxScroll(event)" id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
             <form onsubmit="onMessageSubmit(event)" class="chatForm" action="">
                 <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
                 <button disabled>Send</button>

@@ -3,9 +3,8 @@ const Like = require("../models/Like")
 const Post = require("../models/Post")
 const User = require("../models/User")
 
-async function getAllPosts(userId) {
+async function getAllPosts(userId, skip) {
     userPostSetting = (await User.findById(userId).populate('settingsId')).settingsId.postsISee
-    let skip = 0
     let limit = 10
     const postsCount = await Post.count()
     const postsToReturn = []
@@ -36,16 +35,14 @@ async function getAllPosts(userId) {
     return postsToReturn
 }
 
-async function getUserPosts(ownerId) {
-    let skip = 0
-    let limit = 10
+async function getUserPosts(ownerId, skip) {
     return Post.find({ ownerId })
         .populate({
             path: 'likeIds',
             populate: {
                 path: 'ownerId',
             }
-        }).skip(skip).limit(limit).lean()
+        }).skip(skip * 10).limit(10).lean()
 }
 
 async function createPost(ownerId, { text, images }) {

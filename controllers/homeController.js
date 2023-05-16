@@ -1,12 +1,12 @@
 const { getAllPosts } = require('../services/postService')
-const { getAllUsers, addFriend } = require('../services/userService')
+const { getAllUsers } = require('../services/userService')
 const { userOnly } = require('../util/guards')
 const authController = require('./authController')
 
 const homeController = require('express').Router()
 
 homeController.get('/', userOnly(), async (req, res) => {
-    const posts = (await getAllPosts(req.user._id)).map(a =>
+    const posts = (await getAllPosts(req.user._id, 0)).map(a =>
         Object.assign(a, {
             likesCount: a.likeIds.length,
             isLiked: a.likeIds.map(l => l.ownerId._id.toString()).includes(req.user._id)
@@ -14,6 +14,20 @@ homeController.get('/', userOnly(), async (req, res) => {
     res.render('home', {
         posts
     })
+})
+
+homeController.get('/all-posts', userOnly(), async (req, res) => {
+    try {
+        const posts = (await getAllPosts(req.user._id, req.query.skip)).map(a =>
+            Object.assign(a, {
+                likesCount: a.likeIds.length,
+                isLiked: a.likeIds.map(l => l.ownerId._id.toString()).includes(req.user._id)
+            }))
+        res.status(200).json(posts)
+    } catch (error) {
+        console.log(error);
+        res.status(404).end()
+    }
 })
 
 homeController.get('/search', userOnly(), async (req, res) => {

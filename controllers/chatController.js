@@ -4,10 +4,9 @@ const { getFriends } = require('../services/userService');
 
 const chatController = require('express').Router()
 
-chatController.get('/:skip', async (req, res) => {
+chatController.get('/', async (req, res) => {
     try {
-        console.log(req.params.skip);
-        const chats = (await getAllChatsForUser({ userId: req.user._id, skip: req.params.skip })).map(c => {
+        const chats = (await getAllChatsForUser({ userId: req.user._id, skip: req.query.skip })).map(c => {
             if (!c.name) {
                 c.userIds.splice(c.userIds.findIndex(u => u._id == req.user._id), 1)
                 if (c.userIds[0]) c.name = c.userIds[0].username
@@ -46,7 +45,7 @@ chatController.post('/create',
 
 chatController.get('/:id', async (req, res) => {
     try {
-        const chat = (await getChatById(req.params.id))
+        const chat = await getChatById(req.params.id)
         chat.messageIds.map(m => { m.createdOn = m.createdOn.toString(); return m })
         res.status(200).json(chat)
     } catch (error) {

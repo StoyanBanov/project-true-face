@@ -16,6 +16,21 @@ userController.get('/', async (req, res) => {
     res.render('profile', Object.assign(req.user, { posts }))
 })
 
+userController.get('/my-posts', async (req, res) => {
+    try {
+        const posts = (await getUserPosts(req.user._id, req.query.skip)).map(a =>
+            Object.assign(a, {
+                likesCount: a.likeIds.length,
+                isLiked: a.likeIds.map(l => l.ownerId._id.toString()).includes(req.user._id),
+                isCurrentUserPost: true
+            }))
+        res.status(200).json(posts)
+    } catch (error) {
+        console.log(error.message);
+        res.status(404).end()
+    }
+})
+
 userController.post('/', formBody(), async (req, res) => {
     try {
         await updateUserProperty(req.user._id, { profilePic: req.body.profilePic })

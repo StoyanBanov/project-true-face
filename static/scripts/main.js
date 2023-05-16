@@ -1,27 +1,41 @@
 import { profilePicView, chatIconView, chatIconViewLi, chatBoxView, chatBoxLiView } from "/static/views.js"
+import { postsView } from "/static/profileViews.js"
 import { get } from "/static/scripts/api.js"
 
 const userId = await get('profile/current-user?select=_id')
 const socket = io('/', { query: `userId=${userId}` });
 
+const postsUl = document.querySelector('.homePosts')
 const profilePic = document.getElementById('profilePic')
 const chatIcon = document.getElementById('chatIcon')
 const dropDown = document.getElementById('dropDown')
 let currentViewName
+let isLoadingChats = false
+let isLoadingPosts = false
 let openChatBoxes = []
-let skip = 0
+let chatSkip = 0
+let postsSkip = 1
 window.addEventListener('click', async (e) => {
     if (dropDown.style.display == 'flex' && e.target != dropDown && e.target != profilePic && e.target != chatIcon) {
         dropDown.style.display = 'none'
-        skip = 0
+        chatSkip = 0
     } else if (e.target == profilePic) {
         handleDropDown('profilePic', profilePicView)
         dropDown.style.height = '60px'
     } else if (e.target == chatIcon) {
-        const chats = await get('chats/' + skip++)
+        const chats = await get('chats?skip=' + chatSkip++)
         if (chats.length * 34 + 33 < window.innerHeight) dropDown.style.height = chats.length * 34 + 33 + 'px'
         else dropDown.style.height = window.innerHeight - 100 + 'px'
         handleDropDown('chatView', chatIconView, chats)
+    }
+})
+
+addEventListener('scroll', async e => {
+    if (postsUl.getBoundingClientRect().bottom < innerHeight && !isLoadingPosts) {
+        isLoadingPosts = true
+        const posts = await get('all-posts?skip=' + postsSkip++)
+        postsUl.innerHTML += postsView(posts)
+        isLoadingPosts = false
     }
 })
 
@@ -51,7 +65,7 @@ function handleDropDown(name, viewCallBack, ...params) {
         currentViewName = name
     } else if (currentViewName == name) {
         dropDown.style.display = 'none'
-        skip = 0
+        chatSkip = 0
     }
 }
 
@@ -98,10 +112,17 @@ window.onCloseMsgBox = e => {
 }
 
 window.onChatDropScroll = async e => {
-    if (e.target.children[e.target.children.length - 1].getBoundingClientRect().bottom + window.pageYOffset == e.target.getBoundingClientRect().bottom + window.pageYOffset) {
-        const chats = await get('chats/' + skip++)
+    if (e.target.children[e.target.children.length - 1].getBoundingClientRect().bottom + window.pageYOffset == e.target.getBoundingClientRect().bottom + window.pageYOffset
+        && !isLoadingChats) {
+        isLoadingChats = true
+        const chats = await get('chats/' + chatSkip++)
         e.target.innerHTML += chats.map(chatIconViewLi).join('\n')
+        isLoadingChats = false
     }
+}
+
+window.onChatBoxScroll = e => {
+    //todo
 }
 
 function removeChatBox(boxId) {
