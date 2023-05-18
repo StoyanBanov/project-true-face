@@ -17,7 +17,21 @@ export function chatIconViewLi(c) {
 }
 
 export function chatBoxView(chat, messages, userId) {
-    return `<a onclick="onCloseMsgBox(event)" href="javascript:void(0)">X</a>
+    return `<div class="chatTopBar">
+                <a onclick="onCloseMsgBox(event)" href="javascript:void(0)">
+                    <svg height="20" width="20">
+                        <circle cx="10" cy="6" r="2" fill="grey" />
+                        <circle cx="10" cy="12" r="2" fill="grey" />
+                        <circle cx="10" cy="18" r="2" fill="grey" />
+                    </svg>
+                </a>
+                <a onclick="onCloseMsgBox(event)" href="javascript:void(0)">
+                    <svg width="20" height="20">
+                        <line x1="4" x2="16" y1="6" y2="18" style="stroke:rgb(255,0,0);stroke-width:2"></line>
+                        <line x1="4" x2="16" y1="18" y2="6" style="stroke:rgb(255,0,0);stroke-width:2"></line>
+                    </svg>
+                </a>
+            </div>
             <ul onscroll="onChatBoxScroll(event)" id="${chat._id}-chat" class="chatMessages">${messages.reverse().map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
             <form onsubmit="onMessageSubmit(event)" class="chatForm" action="">
                 <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />

@@ -106,7 +106,7 @@ window.onMessageKeyUp = e => {
 }
 
 window.onCloseMsgBox = e => {
-    e.target.parentElement.remove()
+    e.target.parentElement.parentElement.remove()
     const boxId = openChatBoxes.indexOf(e.target.parentElement)
     removeChatBox(boxId)
 }
