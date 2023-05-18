@@ -1,5 +1,5 @@
 const { body } = require('express-validator');
-const { getAllChatsForUser, getChatById, createChat } = require('../services/chatService');
+const { getAllChatsForUser, getChatById, createChat, getChatMessages } = require('../services/chatService');
 const { getFriends } = require('../services/userService');
 
 const chatController = require('express').Router()
@@ -46,8 +46,17 @@ chatController.post('/create',
 chatController.get('/:id', async (req, res) => {
     try {
         const chat = await getChatById(req.params.id)
-        chat.messageIds.map(m => { m.createdOn = m.createdOn.toString(); return m })
         res.status(200).json(chat)
+    } catch (error) {
+        console.log(error.message);
+        res.status(404).end()
+    }
+})
+
+chatController.get('/:id/messages', async (req, res) => {
+    try {
+        const messages = (await getChatMessages(req.params.id, req.query.lastMessageId)).map(m => { m.createdOn = m.createdOn.toString(); return m })
+        res.status(200).json(messages)
     } catch (error) {
         console.log(error.message);
         res.status(404).end()

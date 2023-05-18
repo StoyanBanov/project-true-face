@@ -17,7 +17,7 @@ module.exports = server => {
                     userChats.push(chat)
                 }
                 const message = await addMessageToChat(chatId, userId, text)
-                io.to(chatId).emit('chat message', { text, chatId, ownerId: userId, createdOn: message.createdOn.toString() });
+                io.to(chatId).emit('chat message', { text, chatId, ownerId: { _id: userId }, createdOn: message.createdOn.toString() });
             }
         });
     });

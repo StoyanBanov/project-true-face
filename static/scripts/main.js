@@ -5,7 +5,7 @@ import { get } from "/static/scripts/api.js"
 const userId = await get('profile/current-user?select=_id')
 const socket = io('/', { query: `userId=${userId}` });
 
-const postsUl = document.querySelector('.homePosts')
+const postsUl = document.querySelector('.homePosts').sc
 const profilePic = document.getElementById('profilePic')
 const chatIcon = document.getElementById('chatIcon')
 const dropDown = document.getElementById('dropDown')
@@ -71,7 +71,7 @@ function handleDropDown(name, viewCallBack, ...params) {
 
 async function appendChatBox(chatId) {
     let chatUl = document.getElementById(chatId + '-chat')
-    const chat = await get(`chats/${chatId}`)
+    const [chat, messages] = await Promise.all([get(`chats/${chatId}`), get(`chats/${chatId}/messages?lastMessageId=-1`)])
     if (chatUl || !chat) return
     const chatBoxDiv = document.createElement('div')
     chatBoxDiv.className = 'chatBox'
@@ -83,7 +83,7 @@ async function appendChatBox(chatId) {
     }
 
     setTimeout(() => {
-        chatBoxDiv.innerHTML = chatBoxView(chat, userId)
+        chatBoxDiv.innerHTML = chatBoxView(chat, messages, userId)
         document.body.appendChild(chatBoxDiv)
         chatUl = chatBoxDiv.children[1]
         chatUl.scrollTo(0, chatUl.scrollHeight);
@@ -100,7 +100,7 @@ window.onMessageSubmit = e => {
 }
 
 window.onMessageKeyUp = e => {
-    const chatSubmit = document.querySelector('.chatForm > button');
+    const chatSubmit = e.target.parentElement.querySelector('button');
     if (e.target.value) chatSubmit.disabled = false
     else chatSubmit.disabled = true
 }
@@ -121,8 +121,20 @@ window.onChatDropScroll = async e => {
     }
 }
 
-window.onChatBoxScroll = e => {
-    //todo
+window.onChatBoxScroll = async e => {
+    const chatId = e.target.id.slice(0, -5)
+    const firstLi = e.target.firstChild
+    if (e.target.getBoundingClientRect().top == firstLi.getBoundingClientRect().top - 1) {
+        const messages = await get(`chats/${chatId}/messages?lastMessageId=${firstLi.id}`)
+        if (messages.length > 0) {
+            e.target.innerHTML = messages.reverse().map(m => chatBoxLiView(m, userId)).join('\n') + e.target.innerHTML
+            e.target.scrollTo({
+                top: firstLi.offsetTop + e.target.offsetHeight,
+                left: 0,
+                behavior: "instant",
+            });
+        }
+    }
 }
 
 function removeChatBox(boxId) {

@@ -16,9 +16,9 @@ export function chatIconViewLi(c) {
             </li>`
 }
 
-export function chatBoxView(chat, userId) {
+export function chatBoxView(chat, messages, userId) {
     return `<a onclick="onCloseMsgBox(event)" href="javascript:void(0)">X</a>
-            <ul onscroll="onChatBoxScroll(event)" id="${chat._id}-chat" class="chatMessages">${chat.messageIds.map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
+            <ul onscroll="onChatBoxScroll(event)" id="${chat._id}-chat" class="chatMessages">${messages.reverse().map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
             <form onsubmit="onMessageSubmit(event)" class="chatForm" action="">
                 <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
                 <button disabled>Send</button>
@@ -26,7 +26,7 @@ export function chatBoxView(chat, userId) {
 }
 
 export function chatBoxLiView(message, userId) {
-    return `<li style="${userId == message.ownerId ? 'text-align:right;"' : 'color:blue;"'}>${message.createdOn.split(' ').slice(1, 4).join(' ')}: ${message.text}</li>`
+    return `<li id="${message._id}" style="${message.ownerId && userId == message.ownerId._id ? 'text-align:right;"' : 'color:blue;"'}>${message.createdOn.split(' ').slice(1, 4).join(' ')}: ${message.text}</li>`
 }
 
 export function commentsView(comments) {

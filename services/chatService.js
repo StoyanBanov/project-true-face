@@ -14,14 +14,23 @@ async function addMessageToChat(chatId, ownerId, text) {
             ownerId,
             text
         })
-        chat.messageIds.push(message._id)
-        await chat.save()
         return message
     } else throw new Error('No such chat')
 }
 
 async function getChatById(chatId) {
-    return Chat.findById(chatId).populate('messageIds').lean()
+    return Chat.findById(chatId).lean()
+}
+
+async function getChatMessages(chatId, lastMessageId) {
+    let lastMessage
+    try {
+        lastMessage = await Message.findById(lastMessageId)
+    } catch (error) {
+
+    }
+    createdOn = lastMessage ? { $lt: lastMessage.createdOn } : { $gt: -1 }
+    return Message.find({ chatId, createdOn }).sort('-_id').limit(10).populate('ownerId').lean()
 }
 
 async function createChat({ name, admin, userIds }) {
@@ -33,5 +42,6 @@ module.exports = {
     getAllChatsForUser,
     addMessageToChat,
     getChatById,
+    getChatMessages,
     createChat
 }
