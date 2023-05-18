@@ -103,6 +103,19 @@ nav>div {
     justify-content: flex-end;
 }
 
+.chatTopBar .chatName {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%
+}
+
+.chatTopBar .chatName>p {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 4px;
+}
+
 .chatTopBar>a {
     border-left: 1px solid lightblue;
 }

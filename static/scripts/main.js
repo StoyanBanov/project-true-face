@@ -18,11 +18,11 @@ let postsSkip = 1
 window.addEventListener('click', async (e) => {
     if (dropDown.style.display == 'flex' && e.target != dropDown && e.target != profilePic && e.target != chatIcon) {
         dropDown.style.display = 'none'
-        chatSkip = 0
     } else if (e.target == profilePic) {
         handleDropDown('profilePic', profilePicView)
         dropDown.style.height = '60px'
     } else if (e.target == chatIcon) {
+        chatSkip = 0
         const chats = await get('chats?skip=' + chatSkip++)
         if (chats.length * 34 + 33 < window.innerHeight) dropDown.style.height = chats.length * 34 + 33 + 'px'
         else dropDown.style.height = window.innerHeight - 100 + 'px'
@@ -106,17 +106,17 @@ window.onMessageKeyUp = e => {
 }
 
 window.onCloseMsgBox = e => {
-    e.target.parentElement.parentElement.remove()
-    const boxId = openChatBoxes.indexOf(e.target.parentElement)
+    const boxId = openChatBoxes.indexOf(e.currentTarget.parentElement.parentElement)
+    e.currentTarget.parentElement.parentElement.remove()
     removeChatBox(boxId)
 }
 
 window.onChatDropScroll = async e => {
-    if (e.target.children[e.target.children.length - 1].getBoundingClientRect().bottom + window.pageYOffset == e.target.getBoundingClientRect().bottom + window.pageYOffset
+    if (e.target.lastChild.getBoundingClientRect().bottom + window.pageYOffset == e.target.getBoundingClientRect().bottom + window.pageYOffset
         && !isLoadingChats) {
         isLoadingChats = true
-        const chats = await get('chats/' + chatSkip++)
-        e.target.innerHTML += chats.map(chatIconViewLi).join('\n')
+        const chats = await get('chats?skip=' + chatSkip++)
+        if (chats) e.target.innerHTML += chats.map(chatIconViewLi).join('\n')
         isLoadingChats = false
     }
 }
@@ -135,6 +135,10 @@ window.onChatBoxScroll = async e => {
             });
         }
     }
+}
+
+window.onClickChatOptions = e => {
+
 }
 
 function removeChatBox(boxId) {

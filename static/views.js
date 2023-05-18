@@ -11,14 +11,17 @@ export function chatIconView(chats) {
 
 export function chatIconViewLi(c) {
     return `<li>
-            <img width="30" height="30" src="/static/images/${c.userIds[0] && c.userIds[0].profilePic ? c.userIds[0].profilePic : 'profile.png'}">
+            <img style="border-radius:50%" width="30" height="30" src="/static/images/${c.userIds[0] && c.userIds[0].profilePic ? c.userIds[0].profilePic : 'profile.png'}">
             <a href="javascript:void(0)" id="${c._id}">${c.name ?? 'former user'}</a>
             </li>`
 }
 
 export function chatBoxView(chat, messages, userId) {
     return `<div class="chatTopBar">
-                <a onclick="onCloseMsgBox(event)" href="javascript:void(0)">
+                <div class="chatName">
+                    <p>${chat.name}</p>
+                </div>
+                <a onclick="onClickChatOptions(event)" href="javascript:void(0)">
                     <svg height="20" width="20">
                         <circle cx="10" cy="6" r="2" fill="grey" />
                         <circle cx="10" cy="12" r="2" fill="grey" />
@@ -37,6 +40,12 @@ export function chatBoxView(chat, messages, userId) {
                 <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
                 <button disabled>Send</button>
             </form>`
+}
+
+export function chatBoxSettingsView(chat, userId) {
+    return `<div>
+                
+            </div>`
 }
 
 export function chatBoxLiView(message, userId) {

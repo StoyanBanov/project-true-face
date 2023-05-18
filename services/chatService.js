@@ -2,7 +2,8 @@ const Chat = require("../models/Chat");
 const Message = require("../models/Message");
 
 async function getAllChatsForUser({ userId, select, skip }) {
-    if (select) return Chat.find({ userIds: userId }).select(select).skip(skip * 10).limit(10).lean()
+    if (skip == 'all ') return Chat.find({ userIds: userId }).select(select).lean()
+    else if (select) return Chat.find({ userIds: userId }).select(select).skip(skip * 10).limit(10).lean()
     return Chat.find({ userIds: userId }).populate('userIds').skip(skip * 10).limit(10).lean()
 }
 
@@ -19,7 +20,7 @@ async function addMessageToChat(chatId, ownerId, text) {
 }
 
 async function getChatById(chatId) {
-    return Chat.findById(chatId).lean()
+    return Chat.findById(chatId).populate('userIds').lean()
 }
 
 async function getChatMessages(chatId, lastMessageId) {

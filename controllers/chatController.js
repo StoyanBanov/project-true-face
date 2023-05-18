@@ -46,9 +46,12 @@ chatController.post('/create',
 chatController.get('/:id', async (req, res) => {
     try {
         const chat = await getChatById(req.params.id)
+        if (!chat.name) {
+            chat.name = chat.userIds.find(u => u._id != req.user._id).username
+        }
         res.status(200).json(chat)
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.status(404).end()
     }
 })
@@ -58,7 +61,7 @@ chatController.get('/:id/messages', async (req, res) => {
         const messages = (await getChatMessages(req.params.id, req.query.lastMessageId)).map(m => { m.createdOn = m.createdOn.toString(); return m })
         res.status(200).json(messages)
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.status(404).end()
     }
 })

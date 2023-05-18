@@ -5,7 +5,7 @@ module.exports = server => {
     const io = new Server(server)
     io.on('connection', async socket => {
         const userId = socket.handshake.query.userId
-        const userChats = await getAllChatsForUser(userId, 'userIds')
+        const userChats = await getAllChatsForUser({ userId, select: 'userIds', skip: 'all' })
         if (userChats.length > 0) socket.join(userChats.map(c => c._id.toString()))
 
         socket.on('chat message', async (text, chatId) => {
