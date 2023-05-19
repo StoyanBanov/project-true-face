@@ -47,7 +47,8 @@ chatController.get('/:id', async (req, res) => {
     try {
         const chat = await getChatById(req.params.id)
         if (!chat.name) {
-            chat.name = chat.userIds.find(u => u._id != req.user._id).username
+            const userForChatName = chat.userIds.find(u => u._id != req.user._id)
+            if (userForChatName) chat.name = userForChatName.username
         }
         res.status(200).json(chat)
     } catch (error) {

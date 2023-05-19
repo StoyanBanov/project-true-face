@@ -5,7 +5,7 @@ import { get } from "/static/scripts/api.js"
 const userId = await get('profile/current-user?select=_id')
 const socket = io('/', { query: `userId=${userId}` });
 
-const postsUl = document.querySelector('.homePosts').sc
+const postsUl = document.querySelector('.homePosts')
 const profilePic = document.getElementById('profilePic')
 const chatIcon = document.getElementById('chatIcon')
 const dropDown = document.getElementById('dropDown')

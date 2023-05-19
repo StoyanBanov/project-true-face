@@ -19,7 +19,7 @@ export function chatIconViewLi(c) {
 export function chatBoxView(chat, messages, userId) {
     return `<div class="chatTopBar">
                 <div class="chatName">
-                    <p>${chat.name}</p>
+                    <p>${chat.name ?? 'former user'}</p>
                 </div>
                 <a onclick="onClickChatOptions(event)" href="javascript:void(0)">
                     <svg height="20" width="20">
