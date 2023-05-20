@@ -1,6 +1,7 @@
 const Chat = require("../models/Chat")
 const User = require("../models/User")
 const UserSettings = require("../models/UserSettings")
+const { createChat } = require("./chatService")
 
 async function getAllUsers(currentId, { search }, skip) {
     return User.find({}).where('_id').nin([currentId]).where('username').regex(new RegExp(search, 'i')).skip(skip * 10).limit(10).lean()
@@ -40,7 +41,7 @@ async function acceptFriendship(userId, friendId) {
         friend.friendIds.push(userId)
         user.friendRequestIds.splice(user.friendRequestIds.indexOf(friendId), 1)
         friend.friendPendingIds.splice(user.friendRequestIds.indexOf(userId), 1)
-        await Promise.all([user.save(), friend.save(), Chat.create({ userIds: [userId, friendId] })])
+        await Promise.all([user.save(), friend.save(), createChat({ userIds: [userId, friendId] })])
     } else throw new Error('No such friend request')
 }
 

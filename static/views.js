@@ -17,11 +17,12 @@ export function chatIconViewLi(c) {
 }
 
 export function chatBoxView(chat, messages, userId) {
-    return `<div class="chatTopBar">
+    return `<div class="chatSettings"></div>
+            <div class="chatTopBar">
                 <div class="chatName">
                     <p>${chat.name ?? 'former user'}</p>
                 </div>
-                <a onclick="onClickChatOptions(event)" href="javascript:void(0)">
+                <a onclick="onClickChatSettings(event)" href="javascript:void(0)">
                     <svg height="20" width="20">
                         <circle cx="10" cy="6" r="2" fill="grey" />
                         <circle cx="10" cy="12" r="2" fill="grey" />
@@ -43,9 +44,30 @@ export function chatBoxView(chat, messages, userId) {
 }
 
 export function chatBoxSettingsView(chat, userId) {
-    return `<div>
-                
-            </div>`
+    return `${!chat.admin || chat.admin == userId ? `
+            <div>
+                <input value="${chat.name}">
+                <a onclick="onSetChatName(event)" href="javascript:void(0)">
+                    <svg width="20" height="20">
+                        <line x1="2" x2="8" y1="15" y2="19" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                        <line x1="8" x2="14" y1="19" y2="8" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                    </svg>
+                </a>
+            </div>
+            <div>
+                <input value="${chat.settingsId.theme}">
+                <a onclick="onSetChatTheme(event)" href="javascript:void(0)">
+                    <svg width="20" height="20">
+                        <line x1="2" x2="8" y1="15" y2="19" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                        <line x1="8" x2="14" y1="19" y2="8" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                    </svg>
+                </a>
+            </div>
+            <a href="javascript:void(0)">mute</a>
+            <a style="color:red;" href="javascript:void(0)">Delete</a>` : `
+            <p>${chat.name}</p>
+            <p>${chat.settingsId.theme}</p>
+            <p>mute</p>`}`
 }
 
 export function chatBoxLiView(message, userId) {

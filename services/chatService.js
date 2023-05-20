@@ -1,4 +1,5 @@
 const Chat = require("../models/Chat");
+const ChatSettings = require("../models/ChatSettings");
 const Message = require("../models/Message");
 
 async function getAllChatsForUser({ userId, select, skip }) {
@@ -20,7 +21,7 @@ async function addMessageToChat(chatId, ownerId, text) {
 }
 
 async function getChatById(chatId) {
-    return Chat.findById(chatId).populate('userIds').lean()
+    return Chat.findById(chatId).populate('userIds').populate('settingsId').lean()
 }
 
 async function getChatMessages(chatId, lastMessageId) {
@@ -35,8 +36,10 @@ async function getChatMessages(chatId, lastMessageId) {
 }
 
 async function createChat({ name, admin, userIds }) {
-    userIds.push(admin)
-    await Chat.create({ name, admin, userIds })
+    if (admin) userIds.push(admin)
+    const [chat, chatSettings] = await Promise.all([Chat.create({ name, admin, userIds }), ChatSettings.create({})])
+    chat.settingsId = chatSettings._id
+    await chat.save()
 }
 
 module.exports = {

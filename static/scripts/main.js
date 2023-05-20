@@ -1,4 +1,4 @@
-import { profilePicView, chatIconView, chatIconViewLi, chatBoxView, chatBoxLiView } from "/static/views.js"
+import { profilePicView, chatIconView, chatIconViewLi, chatBoxView, chatBoxLiView, chatBoxSettingsView } from "/static/views.js"
 import { postsView } from "/static/profileViews.js"
 import { get } from "/static/scripts/api.js"
 
@@ -85,7 +85,7 @@ async function appendChatBox(chatId) {
     setTimeout(() => {
         chatBoxDiv.innerHTML = chatBoxView(chat, messages, userId)
         document.body.appendChild(chatBoxDiv)
-        chatUl = chatBoxDiv.children[1]
+        chatUl = chatBoxDiv.querySelector('ul')
         chatUl.scrollTo(0, chatUl.scrollHeight);
     }, 300)
 }
@@ -106,9 +106,9 @@ window.onMessageKeyUp = e => {
 }
 
 window.onCloseMsgBox = e => {
-    const boxId = openChatBoxes.indexOf(e.currentTarget.parentElement.parentElement)
-    e.currentTarget.parentElement.parentElement.remove()
-    removeChatBox(boxId)
+    const chatBox = e.currentTarget.parentElement.parentElement
+    chatBox.remove()
+    removeChatBox(openChatBoxes.indexOf(chatBox))
 }
 
 window.onChatDropScroll = async e => {
@@ -124,12 +124,12 @@ window.onChatDropScroll = async e => {
 window.onChatBoxScroll = async e => {
     const chatId = e.target.id.slice(0, -5)
     const firstLi = e.target.firstChild
-    if (e.target.getBoundingClientRect().top == firstLi.getBoundingClientRect().top - 1) {
+    if (e.target.getBoundingClientRect().top == firstLi.getBoundingClientRect().top) {
         const messages = await get(`chats/${chatId}/messages?lastMessageId=${firstLi.id}`)
         if (messages.length > 0) {
             e.target.innerHTML = messages.reverse().map(m => chatBoxLiView(m, userId)).join('\n') + e.target.innerHTML
             e.target.scrollTo({
-                top: firstLi.offsetTop + e.target.offsetHeight,
+                top: Array.from(e.target.children).slice(0, messages.length).reduce((totalHeight, li) => totalHeight + li.offsetHeight, 0),
                 left: 0,
                 behavior: "instant",
             });
@@ -137,7 +137,23 @@ window.onChatBoxScroll = async e => {
     }
 }
 
-window.onClickChatOptions = e => {
+window.onClickChatSettings = async e => {
+    const chatBox = e.currentTarget.parentElement.parentElement
+    if (!chatBox.firstChild.innerHTML) {
+        const chat = await get('chats/' + chatBox.querySelector('ul').id.slice(0, -5))
+        chatBox.firstChild.innerHTML = chatBoxSettingsView(chat, userId)
+        chatBox.style.height = chatBox.offsetHeight + chatBox.firstChild.offsetHeight + 'px'
+    } else {
+        chatBox.style.height = chatBox.offsetHeight - chatBox.firstChild.offsetHeight + 'px'
+        chatBox.firstChild.innerHTML = ''
+    }
+}
+
+window.onSetChatName = async e => {
+
+}
+
+window.onSetChatTheme = async e => {
 
 }
 
@@ -149,5 +165,5 @@ function removeChatBox(boxId) {
 }
 
 function getChatIdFromChatBox(element) {
-    return element.parentElement.children[1].id.split('-')[0]
+    return element.parentElement.querySelector('ul').id.split('-')[0]
 }

@@ -90,17 +90,34 @@ nav>div {
 }
 
 .chatBox {
+    display: flex;
+    flex-direction: column;
     background-color: #fff;
     position: fixed;
     bottom: 0px;
     width: 300px;
+    height: 300px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .chatTopBar {
+    border: 1px solid rgb(195, 195, 255);
     display: flex;
     width: 100%;
     justify-content: flex-end;
+}
+
+.chatSettings {
+    display: flex;
+    flex-direction: column;
+}
+
+.chatSettings>div>a {
+    border: 1px solid lightblue;
+}
+
+.chatSettings>div>a:hover {
+    background-color: rgb(242, 252, 255);
 }
 
 .chatTopBar .chatName {
@@ -125,6 +142,7 @@ nav>div {
 }
 
 .chatForm {
+    flex-shrink: 0;
     background: rgba(0, 0, 0, 0.15);
     padding: 0.25rem;
     bottom: 0;
@@ -159,9 +177,8 @@ nav>div {
 }
 
 .chatMessages {
-    border: 1px solid rgb(195, 195, 255);
     overflow: auto;
-    height: 200px;
+    height: 100%;
     list-style-type: none;
     margin: 0;
     padding: 0;

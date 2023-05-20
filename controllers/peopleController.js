@@ -50,7 +50,7 @@ peopleController.put('/accept-friend', async (req, res) => {
         await acceptFriendship(req.user._id, req.body.friendId)
         res.status(301)
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.status(404)
     }
     res.end()
