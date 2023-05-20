@@ -54,8 +54,8 @@ export function chatBoxSettingsView(chat, userId) {
                 </div>
                 <a chat-id="${chat._id}" onclick="onSetChatName(event)" href="javascript:void(0)">
                     <svg width="20" height="20">
-                        <line x1="2" x2="8" y1="12" y2="19" style="stroke:rgb(0,255,0);stroke-width:2"></line>
-                        <line x1="8" x2="14" y1="19" y2="8" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                        <line x1="2" x2="8" y1="12" y2="19" class="${chat.settingsId.theme == 'light' ? 'chatSettingsCheckLight' : 'chatSettingsCheckDark'}"></line>
+                        <line x1="8" x2="14" y1="19" y2="8" class="${chat.settingsId.theme == 'light' ? 'chatSettingsCheckLight' : 'chatSettingsCheckDark'}"></line>
                     </svg>
                 </a>
             </div>` : `<p>${chat.name}</p>`}
@@ -69,8 +69,8 @@ export function chatBoxSettingsView(chat, userId) {
                 </div>
                 <a chat-id="${chat._id}" onclick="onSetChatTheme(event)" href="javascript:void(0)">
                     <svg width="20" height="20">
-                        <line x1="2" x2="8" y1="12" y2="19" style="stroke:rgb(0,255,0);stroke-width:2"></line>
-                        <line x1="8" x2="14" y1="19" y2="8" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                        <line x1="2" x2="8" y1="12" y2="19" class="${chat.settingsId.theme == 'light' ? 'chatSettingsCheckLight' : 'chatSettingsCheckDark'}"></line>
+                        <line x1="8" x2="14" y1="19" y2="8" class="${chat.settingsId.theme == 'light' ? 'chatSettingsCheckLight' : 'chatSettingsCheckDark'}"></line>
                     </svg>
                 </a>
             </div>

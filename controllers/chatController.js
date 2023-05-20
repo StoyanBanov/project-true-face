@@ -1,5 +1,5 @@
 const { body } = require('express-validator');
-const { getAllChatsForUser, getChatById, createChat, getChatMessages, updateChatSettings, getChatSettings } = require('../services/chatService');
+const { getAllChatsForUser, getChatById, createChat, getChatMessages, updateChatSettings, getChatSettings, updateChat } = require('../services/chatService');
 const { getFriends } = require('../services/userService');
 
 const chatController = require('express').Router()
@@ -20,6 +20,17 @@ chatController.get('/', async (req, res) => {
     }
 })
 
+chatController.put('/:id', body('name').trim(), async (req, res) => {
+    try {
+        await updateChat(req.params.id, req.body)
+        res.status(201)
+    } catch (error) {
+        console.log(error);
+        res.status(404)
+    }
+    res.end()
+})
+
 chatController.get('/:id/settings', async (req, res) => {
     try {
         const { settingsId } = await getChatSettings(req.params.id)
@@ -30,7 +41,7 @@ chatController.get('/:id/settings', async (req, res) => {
     }
 })
 
-chatController.put('/:id/settings', body('name').trim(), async (req, res) => {
+chatController.put('/:id/settings', async (req, res) => {
     try {
         await updateChatSettings(req.params.id, req.body)
         res.status(201)

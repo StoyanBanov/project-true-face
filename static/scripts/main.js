@@ -150,7 +150,8 @@ window.onClickChatSettings = async e => {
 }
 
 window.onSetChatName = async e => {
-
+    const chatId = e.currentTarget.getAttribute('chat-id')
+    await put(`chats/${chatId}`, { name: e.currentTarget.parentElement.querySelector('input').value })
 }
 
 window.onSetChatTheme = async e => {

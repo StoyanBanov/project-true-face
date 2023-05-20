@@ -43,14 +43,27 @@ async function createChat({ name, admin, userIds }) {
     await chat.save()
 }
 
+async function updateChat(id, { admin, name }) {
+    const chat = await Chat.findById(id)
+    if (chat) {
+        if (admin) {
+            if (chat.userIds.includes(admin)) chat.admin = admin
+            else throw new Error('No such user in this chat!')
+        }
+        if (name) {
+            chat.name = name
+        }
+        await chat.save()
+    } else throw new Error('No such chat!')
+}
+
 async function updateChatSettings(id, { theme, mutedId }) {
     const chat = await Chat.findById(id)
     if (chat) {
         const settings = await ChatSettings.findById(chat.settingsId)
         if (theme) settings.theme = theme
         if (mutedId) {
-            const user = await User.findById(mutedId)
-            if (user && chat.userIds.includes(mutedId)) {
+            if (chat.userIds.includes(mutedId)) {
                 if (!settings.mutedUserIds.includes(mutedId)) {
                     settings.mutedUserIds.push(mutedId)
                 } else {
@@ -72,6 +85,7 @@ module.exports = {
     getChatById,
     getChatMessages,
     createChat,
+    updateChat,
     updateChatSettings,
     getChatSettings
 }
