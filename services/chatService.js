@@ -1,6 +1,7 @@
 const Chat = require("../models/Chat");
 const ChatSettings = require("../models/ChatSettings");
 const Message = require("../models/Message");
+const User = require("../models/User");
 
 async function getAllChatsForUser({ userId, select, skip }) {
     if (skip == 'all ') return Chat.find({ userIds: userId }).select(select).lean()
@@ -42,10 +43,35 @@ async function createChat({ name, admin, userIds }) {
     await chat.save()
 }
 
+async function updateChatSettings(id, { theme, mutedId }) {
+    const chat = await Chat.findById(id)
+    if (chat) {
+        const settings = await ChatSettings.findById(chat.settingsId)
+        if (theme) settings.theme = theme
+        if (mutedId) {
+            const user = await User.findById(mutedId)
+            if (user && chat.userIds.includes(mutedId)) {
+                if (!settings.mutedUserIds.includes(mutedId)) {
+                    settings.mutedUserIds.push(mutedId)
+                } else {
+                    settings.mutedUserIds.splice(settings.mutedUserIds.indexOf(mutedId), 1)
+                }
+            } else throw new Error('No such user in this chat, or already muted!')
+        }
+        await settings.save()
+    } else throw new Error('No such chat!')
+}
+
+async function getChatSettings(chatId) {
+    return Chat.findById(chatId).populate('settingsId').lean()
+}
+
 module.exports = {
     getAllChatsForUser,
     addMessageToChat,
     getChatById,
     getChatMessages,
-    createChat
+    createChat,
+    updateChatSettings,
+    getChatSettings
 }

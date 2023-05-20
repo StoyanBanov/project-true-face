@@ -16,62 +16,73 @@ export function chatIconViewLi(c) {
             </li>`
 }
 
-export function chatBoxView(chat, messages, userId) {
-    return `<div class="chatSettings"></div>
-            <div class="chatTopBar">
-                <div class="chatName">
-                    <p>${chat.name ?? 'former user'}</p>
+export function chatBoxView(chat, messages, userId, styleRight) {
+    return `<div style="right:${styleRight}px;" id="${chat._id}-box" class="chatBox ${chat.settingsId.theme == 'dark' ? 'chatDark' : ''}">
+                <div class="chatSettings"></div>
+                <div class="chatTopBar">
+                    <div class="chatName">
+                        <p>${chat.name ?? 'former user'}</p>
+                    </div>
+                    <a chat-id="${chat._id}" onclick="onClickChatSettings(event)" href="javascript:void(0)">
+                        <svg height="20" width="20">
+                            <circle class="${chat.settingsId.theme == 'light' ? 'chatSettingsDotsGray' : 'chatSettingsDotsWhite'}" cx="10" cy="6" r="2" />
+                            <circle class="${chat.settingsId.theme == 'light' ? 'chatSettingsDotsGray' : 'chatSettingsDotsWhite'}" cx="10" cy="12" r="2" />
+                            <circle class="${chat.settingsId.theme == 'light' ? 'chatSettingsDotsGray' : 'chatSettingsDotsWhite'}" cx="10" cy="18" r="2" />
+                        </svg>
+                    </a>
+                    <a chat-id="${chat._id}" onclick="onCloseMsgBox(event)" href="javascript:void(0)">
+                        <svg width="20" height="20">
+                            <line class="${chat.settingsId.theme == 'light' ? 'chatSettingsCloseGray' : 'chatSettingsCloseWhite'}" x1="4" x2="16" y1="6" y2="18"></line>
+                            <line class="${chat.settingsId.theme == 'light' ? 'chatSettingsCloseGray' : 'chatSettingsCloseWhite'}" x1="4" x2="16" y1="18" y2="6"></line>
+                        </svg>
+                    </a>
                 </div>
-                <a onclick="onClickChatSettings(event)" href="javascript:void(0)">
-                    <svg height="20" width="20">
-                        <circle cx="10" cy="6" r="2" fill="grey" />
-                        <circle cx="10" cy="12" r="2" fill="grey" />
-                        <circle cx="10" cy="18" r="2" fill="grey" />
-                    </svg>
-                </a>
-                <a onclick="onCloseMsgBox(event)" href="javascript:void(0)">
-                    <svg width="20" height="20">
-                        <line x1="4" x2="16" y1="6" y2="18" style="stroke:rgb(255,0,0);stroke-width:2"></line>
-                        <line x1="4" x2="16" y1="18" y2="6" style="stroke:rgb(255,0,0);stroke-width:2"></line>
-                    </svg>
-                </a>
-            </div>
-            <ul onscroll="onChatBoxScroll(event)" id="${chat._id}-chat" class="chatMessages">${messages.reverse().map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
-            <form onsubmit="onMessageSubmit(event)" class="chatForm" action="">
-                <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
-                <button disabled>Send</button>
-            </form>`
+                <ul onscroll="onChatBoxScroll(event)" id="${chat._id}-chat" class="chatMessages">${messages.reverse().map(m => chatBoxLiView(m, userId)).join('\n')}</ul>
+                <form chat-id="${chat._id}" onsubmit="onMessageSubmit(event)" class="chatForm" action="">
+                    <input onkeyup="onMessageKeyUp(event)" name="text" class="chatInput" autocomplete="off" />
+                    <button disabled>Send</button>
+                </form>
+            </div>`
 }
 
 export function chatBoxSettingsView(chat, userId) {
     return `${!chat.admin || chat.admin == userId ? `
-            <div>
-                <input value="${chat.name}">
-                <a onclick="onSetChatName(event)" href="javascript:void(0)">
+            ${chat.admin ? `
+            <div class="chatSet">
+                <div>
+                    <input id="chat-name" value="${chat.name}">
+                </div>
+                <a chat-id="${chat._id}" onclick="onSetChatName(event)" href="javascript:void(0)">
                     <svg width="20" height="20">
-                        <line x1="2" x2="8" y1="15" y2="19" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                        <line x1="2" x2="8" y1="12" y2="19" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                        <line x1="8" x2="14" y1="19" y2="8" style="stroke:rgb(0,255,0);stroke-width:2"></line>
+                    </svg>
+                </a>
+            </div>` : `<p>${chat.name}</p>`}
+            
+            <div class="chatSet">
+                <div>
+                    <select name="chat-theme" >
+                        <option ${chat.settingsId.theme == 'dark' ? 'selected' : ''}>dark</option>
+                        <option ${chat.settingsId.theme == 'light' ? 'selected' : ''}>light</option>
+                    </select>
+                </div>
+                <a chat-id="${chat._id}" onclick="onSetChatTheme(event)" href="javascript:void(0)">
+                    <svg width="20" height="20">
+                        <line x1="2" x2="8" y1="12" y2="19" style="stroke:rgb(0,255,0);stroke-width:2"></line>
                         <line x1="8" x2="14" y1="19" y2="8" style="stroke:rgb(0,255,0);stroke-width:2"></line>
                     </svg>
                 </a>
             </div>
-            <div>
-                <input value="${chat.settingsId.theme}">
-                <a onclick="onSetChatTheme(event)" href="javascript:void(0)">
-                    <svg width="20" height="20">
-                        <line x1="2" x2="8" y1="15" y2="19" style="stroke:rgb(0,255,0);stroke-width:2"></line>
-                        <line x1="8" x2="14" y1="19" y2="8" style="stroke:rgb(0,255,0);stroke-width:2"></line>
-                    </svg>
-                </a>
-            </div>
-            <a href="javascript:void(0)">mute</a>
-            <a style="color:red;" href="javascript:void(0)">Delete</a>` : `
+            <a chat-id="${chat._id}" onclick="onMuteChat(event)" href="javascript:void(0)">${chat.settingsId.mutedUserIds.includes(userId) ? 'unmute' : 'mute'}</a>
+            <a chat-id="${chat._id}" class="${chat.settingsId.theme == 'dark' ? 'chatDeleteLight' : ''}" href="javascript:void(0)">Delete</a>` : `
             <p>${chat.name}</p>
             <p>${chat.settingsId.theme}</p>
-            <p>mute</p>`}`
+            <p>mute</p>`} `
 }
 
 export function chatBoxLiView(message, userId) {
-    return `<li id="${message._id}" style="${message.ownerId && userId == message.ownerId._id ? 'text-align:right;"' : 'color:blue;"'}>${message.createdOn.split(' ').slice(1, 4).join(' ')}: ${message.text}</li>`
+    return `<li id="${message._id}" style="${message.ownerId && userId == message.ownerId._id ? 'text-align:right;"' : 'color: blue; "'}>${message.createdOn.split(' ').slice(1, 4).join(' ')}: ${message.text}</li>`
 }
 
 export function commentsView(comments) {

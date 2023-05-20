@@ -1,6 +1,6 @@
 import { profilePicView, chatIconView, chatIconViewLi, chatBoxView, chatBoxLiView, chatBoxSettingsView } from "/static/views.js"
 import { postsView } from "/static/profileViews.js"
-import { get } from "/static/scripts/api.js"
+import { get, put } from "/static/scripts/api.js"
 
 const userId = await get('profile/current-user?select=_id')
 const socket = io('/', { query: `userId=${userId}` });
@@ -50,8 +50,8 @@ dropDown.addEventListener('click', async e => {
 socket.on('chat message', async ({ text, chatId, ownerId, createdOn }) => {
     let chatUl = document.getElementById(chatId + '-chat')
     if (!chatUl) {
-        await appendChatBox(chatId)
-        chatUl = document.getElementById(chatId + '-chat')
+        const chatSettings = await get(`chats/${chatId}/settings`)
+        if (!chatSettings.mutedUserIds.includes(userId)) await appendChatBox(chatId)
     } else {
         chatUl.innerHTML += chatBoxLiView({ text, ownerId, createdOn }, userId)
         chatUl.scrollTo(0, chatUl.scrollHeight);
@@ -73,18 +73,15 @@ async function appendChatBox(chatId) {
     let chatUl = document.getElementById(chatId + '-chat')
     const [chat, messages] = await Promise.all([get(`chats/${chatId}`), get(`chats/${chatId}/messages?lastMessageId=-1`)])
     if (chatUl || !chat) return
-    const chatBoxDiv = document.createElement('div')
-    chatBoxDiv.className = 'chatBox'
 
-    chatBoxDiv.style.right = `${openChatBoxes.length * 320 + 100}px`
-    openChatBoxes.push(chatBoxDiv)
-    if (openChatBoxes.length > 4) {
+    if (openChatBoxes.length == 4) {
         removeChatBox(0)
     }
 
     setTimeout(() => {
-        chatBoxDiv.innerHTML = chatBoxView(chat, messages, userId)
-        document.body.appendChild(chatBoxDiv)
+        document.body.querySelector('#chats').innerHTML += chatBoxView(chat, messages, userId, openChatBoxes.length * 320 + 100)
+        const chatBoxDiv = document.getElementById(chatId + '-box')
+        openChatBoxes.push(chatBoxDiv)
         chatUl = chatBoxDiv.querySelector('ul')
         chatUl.scrollTo(0, chatUl.scrollHeight);
     }, 300)
@@ -94,7 +91,7 @@ window.onMessageSubmit = e => {
     e.preventDefault();
     const text = Object.fromEntries((new FormData(e.target)).entries()).text
     if (text) {
-        socket.emit('chat message', text, getChatIdFromChatBox(e.target));
+        socket.emit('chat message', text, e.target.getAttribute('chat-id'));
         e.target.reset()
     }
 }
@@ -106,7 +103,8 @@ window.onMessageKeyUp = e => {
 }
 
 window.onCloseMsgBox = e => {
-    const chatBox = e.currentTarget.parentElement.parentElement
+    const chatId = e.currentTarget.getAttribute('chat-id')
+    const chatBox = document.getElementById(chatId + '-box')
     chatBox.remove()
     removeChatBox(openChatBoxes.indexOf(chatBox))
 }
@@ -138,14 +136,16 @@ window.onChatBoxScroll = async e => {
 }
 
 window.onClickChatSettings = async e => {
-    const chatBox = e.currentTarget.parentElement.parentElement
-    if (!chatBox.firstChild.innerHTML) {
-        const chat = await get('chats/' + chatBox.querySelector('ul').id.slice(0, -5))
-        chatBox.firstChild.innerHTML = chatBoxSettingsView(chat, userId)
-        chatBox.style.height = chatBox.offsetHeight + chatBox.firstChild.offsetHeight + 'px'
+    const chatId = e.currentTarget.getAttribute('chat-id')
+    const chatBox = document.getElementById(chatId + '-box')
+    const settingsDiv = chatBox.querySelector('.chatSettings')
+    if (!settingsDiv.innerHTML) {
+        const chat = await get('chats/' + chatId)
+        settingsDiv.innerHTML = chatBoxSettingsView(chat, userId)
+        chatBox.style.height = chatBox.offsetHeight + settingsDiv.offsetHeight + 'px'
     } else {
-        chatBox.style.height = chatBox.offsetHeight - chatBox.firstChild.offsetHeight + 'px'
-        chatBox.firstChild.innerHTML = ''
+        chatBox.style.height = chatBox.offsetHeight - settingsDiv.offsetHeight + 'px'
+        settingsDiv.innerHTML = ''
     }
 }
 
@@ -154,7 +154,15 @@ window.onSetChatName = async e => {
 }
 
 window.onSetChatTheme = async e => {
+    const theme = e.currentTarget.parentElement.querySelector('select').value
+    const chatId = e.currentTarget.getAttribute('chat-id')
+    await put(`chats/${chatId}/settings`, { theme })
+    setChatClassesForTheme(theme, document.getElementById(chatId + '-box'))
+}
 
+window.onMuteChat = async e => {
+    await put(`chats/${e.currentTarget.getAttribute('chat-id')}/settings`, { mutedId: userId })
+    e.target.textContent = e.target.textContent == 'mute' ? 'unmute' : 'mute'
 }
 
 function removeChatBox(boxId) {
@@ -164,6 +172,15 @@ function removeChatBox(boxId) {
     });
 }
 
-function getChatIdFromChatBox(element) {
-    return element.parentElement.querySelector('ul').id.split('-')[0]
+function setChatClassesForTheme(theme, chatBox) {
+    if (theme == 'dark') {
+        chatBox.classList.add('chatDark')
+        Array.from(chatBox.querySelectorAll('circle')).forEach(c => { c.style.fill = 'white' })
+        Array.from(chatBox.querySelectorAll('line')).forEach(c => { c.style.stroke = 'white' })
+    } else {
+        chatBox.classList.remove('chatDark')
+        Array.from(chatBox.querySelectorAll('circle')).forEach(c => { c.style.fill = 'gray' })
+        Array.from(chatBox.querySelectorAll('.chatTopBar line')).forEach(c => { c.style.stroke = 'red' })
+        Array.from(chatBox.querySelectorAll('.chatSettings line')).forEach(c => { c.style.stroke = 'green' })
+    }
 }
