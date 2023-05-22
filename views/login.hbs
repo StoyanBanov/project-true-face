@@ -5,15 +5,21 @@
     {{/each}}
 </div>
 {{/if}}
-<div>
+<div class="authFormContainer">
     <form action="/login" method="post">
-        <div>
+        <div class="loginDiv">
             <div>
                 <label for="username">Username</label>
+            </div>
+            <div class="authInput">
                 <input type="text" name="username" placeholder="username" value="{{user.username}}">
             </div>
+        </div>
+        <div class="loginDiv">
             <div>
                 <label for="password">Password</label>
+            </div>
+            <div class="authInput">
                 <input type="password" name="password" placeholder="password">
             </div>
         </div>

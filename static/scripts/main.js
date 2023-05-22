@@ -1,13 +1,13 @@
 import { profilePicView, chatIconView, chatIconViewLi, chatBoxView, chatBoxLiView, chatBoxSettingsView } from "/static/views.js"
 import { postsView } from "/static/profileViews.js"
-import { get, put } from "/static/scripts/api.js"
+import { get, put, del } from "/static/scripts/api.js"
 
 const userId = await get('profile/current-user?select=_id')
 const socket = io('/', { query: `userId=${userId}` });
 
 const postsUl = document.querySelector('.homePosts')
 const profilePic = document.getElementById('profilePic')
-const chatIcon = document.getElementById('chatIcon')
+const chatIcon = document.querySelector('#chatIcon svg')
 const dropDown = document.getElementById('dropDown')
 let currentViewName
 let isLoadingChats = false
@@ -164,6 +164,12 @@ window.onSetChatTheme = async e => {
 window.onMuteChat = async e => {
     await put(`chats/${e.currentTarget.getAttribute('chat-id')}/settings`, { mutedId: userId })
     e.target.textContent = e.target.textContent == 'mute' ? 'unmute' : 'mute'
+}
+
+window.onDeleteChat = async e => {
+    const chatId = e.target.getAttribute('chat-id')
+    removeChatBox(document.getElementById(chatId + '-box'))
+    await del('chats/' + chatId)
 }
 
 function removeChatBox(boxId) {

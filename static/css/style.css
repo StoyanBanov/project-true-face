@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -13,11 +14,18 @@ header {
 }
 
 header nav {
+    padding-top: 5px;
+    padding-bottom: 5px;
     width: 100%;
     display: flex;
     align-items: center;
     background-color: aliceblue;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.05);
+}
+
+.navIcon {
+    display: block;
+    height: 40px;
 }
 
 nav>div {
@@ -33,6 +41,12 @@ nav>div {
 }
 
 #headerUl {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
     width: 300px;
 }
 
@@ -68,15 +82,30 @@ nav>div {
     width: 70px;
 }
 
-.requirement-message {
-    color: red;
-}
-
 #profilePic {
     width: 40px;
     height: 40px;
     border-radius: 50%;
 }
+
+#searchForm {
+    padding: 0.15rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    height: 40px;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+}
+
+#searchForm input {
+    border: 1px solid rgba(62, 178, 255, 0.747);
+    padding: 0 1rem;
+    border-radius: 2rem;
+    margin: 0.15rem;
+}
+
 
 
 
@@ -243,9 +272,11 @@ nav>div {
 #createPostA {
     position: sticky;
     top: 53px;
+    margin-left: 20px;
 }
 
 .homePosts {
+    padding: 0;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -323,4 +354,78 @@ nav>div {
 
 .commentContent>p {
     width: 300px;
+}
+
+
+
+
+.authFormContainer {
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.authFormContainer form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.authFormContainer form>div {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.loginDiv {
+    width: 270px;
+}
+
+.registerDiv {
+    width: 900px;
+}
+
+.registerLabel {
+    width: 150px;
+}
+
+.authFormContainer form>div>div {
+    display: flex;
+    flex-direction: row;
+}
+
+.authInput {
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.authFormContainer form>input {
+    margin-top: 10px;
+}
+
+.genderRadio {}
+
+.requirement-message {
+    display: inline-block;
+    color: red;
+    width: 600px;
+    margin-left: 10px;
+}
+
+
+
+
+.guestNavA {
+    display: inline-block;
+    width: 100px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 25px;
+    color: rgba(77, 184, 255, 0.747);
+}
+
+.guestNavA:hover {
+    color: rgba(73, 150, 201, 0.747);
 }

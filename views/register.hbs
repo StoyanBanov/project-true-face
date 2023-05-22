@@ -6,40 +6,56 @@
     {{/each}}
 </div>
 {{/if}}
-<div>
+<div class="authFormContainer">
     <form id="registerForm" action="/register" method="post">
-        <div>
+        <div class="registerDiv">
             <div>
-                <label for="username">Username</label>
+                <label class="registerLabel" for="username">Username</label>
+            </div>
+            <div class="authInput">
                 <input type="text" name="username" placeholder="username" value="{{user.username}}">
                 <label class="requirement-message"></label><br>
             </div>
+        </div>
+        <div class="registerDiv">
             <div>
-                <label for="email">E-mail</label>
+                <label class="registerLabel" for="email">E-mail</label>
+            </div>
+            <div class="authInput">
                 <input type="text" name="email" placeholder="email" value="{{user.email}}">
                 <label class="requirement-message"></label><br>
             </div>
+        </div>
+        <div class="registerDiv">
             <div>
-                <label for="password">Password</label>
+                <label class="registerLabel" for="password">Password</label>
+            </div>
+            <div class="authInput">
                 <input type="password" name="password" placeholder="password">
                 <label class="requirement-message"></label><br>
             </div>
+        </div>
+        <div class="registerDiv">
             <div>
-                <label for="rePassword">Repeat password</label>
+                <label class="registerLabel" for="rePassword">Repeat password</label>
+            </div>
+            <div class="authInput">
                 <input type="password" name="rePassword" placeholder="repeat password">
                 <label class="requirement-message"></label><br>
             </div>
+        </div>
 
+        <div class="registerDiv">
             <div>
-                <label for="gender">Gender</label>
-                <div>
-                    <input type="radio" name="gender" value="male">
-                    <label for="male">male</label>
-                    <input type="radio" name="gender" value="female">
-                    <label for="female">female</label>
-                </div>
+                <label class="registerLabel" for="gender">Gender</label>
+            </div>
+            <div class="genderRadio">
+                <input type="radio" name="gender" value="male">
+                <label for="male">male</label>
+                <input type="radio" name="gender" value="female">
+                <label for="female">female</label>
             </div>
         </div>
-        <input type="submit" value="Register">
+        <input style="margin-right: 300px;" type="submit" value="Register">
     </form>
 </div>

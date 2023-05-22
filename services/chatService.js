@@ -57,6 +57,10 @@ async function updateChat(id, { admin, name }) {
     } else throw new Error('No such chat!')
 }
 
+async function deleteChat(id) {
+    await Chat.findOneAndDelete({ _id: id })
+}
+
 async function updateChatSettings(id, { theme, mutedId }) {
     const chat = await Chat.findById(id)
     if (chat) {
@@ -86,6 +90,7 @@ module.exports = {
     getChatMessages,
     createChat,
     updateChat,
+    deleteChat,
     updateChatSettings,
     getChatSettings
 }

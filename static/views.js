@@ -46,7 +46,8 @@ export function chatBoxView(chat, messages, userId, styleRight) {
 }
 
 export function chatBoxSettingsView(chat, userId) {
-    return `${!chat.admin || chat.admin == userId ? `
+    return `${!chat.admin || chat.admin == userId
+        ? `
             ${chat.admin ? `
             <div class="chatSet">
                 <div>
@@ -75,10 +76,11 @@ export function chatBoxSettingsView(chat, userId) {
                 </a>
             </div>
             <a chat-id="${chat._id}" onclick="onMuteChat(event)" href="javascript:void(0)">${chat.settingsId.mutedUserIds.includes(userId) ? 'unmute' : 'mute'}</a>
-            <a chat-id="${chat._id}" class="${chat.settingsId.theme == 'dark' ? 'chatDeleteLight' : ''}" href="javascript:void(0)">Delete</a>` : `
-            <p>${chat.name}</p>
-            <p>${chat.settingsId.theme}</p>
-            <p>mute</p>`} `
+            ${chat.admin ? `<a chat-id="${chat._id}" class="${chat.settingsId.theme == 'dark' ? '' : 'chatDeleteLight'}" href="javascript:void(0)" onclick="onDeleteChat(event)">Delete</a>` : ''}`
+        : `
+            <p style="margin:0;">${chat.name}</p>
+            <p style="margin:0;">${chat.settingsId.theme}</p>
+            <a chat-id="${chat._id}" onclick="onMuteChat(event)" href="javascript:void(0)">${chat.settingsId.mutedUserIds.includes(userId) ? 'unmute' : 'mute'}</a>`} `
 }
 
 export function chatBoxLiView(message, userId) {
