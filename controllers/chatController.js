@@ -61,15 +61,15 @@ chatController.get('/create', async (req, res) => {
 
 chatController.post('/create',
     body('name').trim(),
-    body(['name', 'userIds']).isEmpty().withMessage('All fields are required!'),
     async (req, res) => {
         try {
-            await createChat(Object.assign(req.body, { admin: req.user._id }))
+            await createChat(Object.assign(req.body, { admin: req.user._id, type: 'group' }))
             res.redirect('/')
         } catch (error) {
             console.log(error);
             const { friendIds: friends } = await getFriends(req.user._id, 0)
             res.render('createChat', {
+                name: req.body.name,
                 friends
             })
         }

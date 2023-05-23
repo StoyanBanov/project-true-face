@@ -119,7 +119,3 @@ export function createCommentView() {
                 <input type="submit" value="Comment">
             </form>`
 }
-
-export function name(params) {
-
-}

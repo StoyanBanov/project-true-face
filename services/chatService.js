@@ -36,9 +36,9 @@ async function getChatMessages(chatId, lastMessageId) {
     return Message.find({ chatId, createdOn }).sort('-_id').limit(10).populate('ownerId').lean()
 }
 
-async function createChat({ name, admin, userIds }) {
+async function createChat({ name, admin, userIds, type }) {
     if (admin) userIds.push(admin)
-    const [chat, chatSettings] = await Promise.all([Chat.create({ name, admin, userIds }), ChatSettings.create({})])
+    const [chat, chatSettings] = await Promise.all([Chat.create({ name, admin, userIds, type }), ChatSettings.create({})])
     chat.settingsId = chatSettings._id
     await chat.save()
 }

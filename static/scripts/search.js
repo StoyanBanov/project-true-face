@@ -20,6 +20,11 @@ usersList.addEventListener('click', async e => {
     } else if (e.target.textContent == 'Accept') {
         await put('people/accept-friend', { friendId: li.id })
         li.innerHTML += `<p>friends</p>`
+    } else if (e.target.textContent == 'Unfriend') {
+        if (window.confirm('Are you sure?')) {
+            await put('people/remove-friend', { friendId: li.id })
+            e.target.textContent = 'Add'
+        }
     }
 })
 

@@ -79,7 +79,7 @@ nav>div {
 
 #dropDown>a {
     display: block;
-    width: 70px;
+    width: 80px;
 }
 
 #profilePic {
@@ -104,6 +104,11 @@ nav>div {
     padding: 0 1rem;
     border-radius: 2rem;
     margin: 0.15rem;
+}
+
+#searchForm input:focus {
+    border: 1px solid rgba(164, 218, 255, 0.747);
+    outline: none;
 }
 
 
@@ -299,11 +304,32 @@ nav>div {
 .postCard>div:nth-child(1) {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    padding-left: 10px;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.postCard>div:nth-child(1) a {
+    margin-left: 6px;
+    text-decoration: none;
+    color: black;
+}
+
+.postCard>div:nth-child(1) a:hover {
+    text-decoration: underline;
+}
+
+.postActions {
+    padding-left: 10px;
+    width: 100%;
 }
 
 .postActions>* {
     display: inline-block;
 }
+
+
 
 
 

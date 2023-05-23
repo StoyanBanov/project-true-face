@@ -3,7 +3,7 @@
     <div>
         <img class="postProfilePic" width="50" height="50"
             src="/static/images/{{#if ownerId.profilePic}}{{ownerId.profilePic}}{{else}}profile.png{{/if}}">
-        <p>{{ownerId.username}}</p>
+        <a href="/">{{ownerId.username}}</a>
     </div>
     {{/unless}}
     <p>{{text}}</p>

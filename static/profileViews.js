@@ -3,7 +3,7 @@ export function friendsView(users) {
     <img width="100" height="100" src="/static/images/${u.profilePic ?? 'profile.png'}">
     <h2>${u.username}</h2>
     <p>${u.friendsCount} friends</p>
-    ${u.isFriend ? `<p>friends</p>` : u.isRequested ? `<a href="javascript:void(0)">Accept</a>` : `<a href="javascript:void(0)">Add</a>`}
+    ${u.isFriend ? `<a href="javascript:void(0)">Unfriend</a>` : u.isRequested ? `<a href="javascript:void(0)">Accept</a>` : `<a href="javascript:void(0)">Add</a>`}
     </li > `).join('\n')}`
 }
 
@@ -12,7 +12,7 @@ export function postsView(posts) {
     ${!p.isCurrentUserPost ? `<div>
         <img class="postProfilePic" width="50" height="50"
             src="/static/images/{{#if ownerId.profilePic}}{{ownerId.profilePic}}{{else}}profile.png{{/if}}">
-        <p>{{ownerId.username}}</p>
+        <a href="/profile/">{{ownerId.username}}</a>
     </div>` : ''}
     <p>${p.text}</p>
     ${p.images ? p.images.map(i => `<img width="500px" height="700px" src="/static/images/${i}">`).join('\n') : ''}

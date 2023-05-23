@@ -1,6 +1,6 @@
 {{#if friends}}
 <form action="/chats/create" method="post">
-    <label>name: <input type="text" name="name"></label><br>
+    <label>name: <input type="text" name="name" value="{{name}}"></label><br>
     <label>add friends</label><br>
     <select name="userIds[]" multiple>
         {{#each friends}}

@@ -35,14 +35,25 @@ async function requestFriendship(userId, friendId) {
 }
 
 async function acceptFriendship(userId, friendId) {
-    const [user, friend] = await Promise.all([User.findById(userId), User.findById(friendId)])
+    const [user, friend, chat] = await Promise.all([User.findById(userId), User.findById(friendId), Chat.find({ userIds: [userId, friendId], type: 'friend' })])
     if (user && friend) {
         user.friendIds.push(friendId)
         friend.friendIds.push(userId)
         user.friendRequestIds.splice(user.friendRequestIds.indexOf(friendId), 1)
         friend.friendPendingIds.splice(user.friendRequestIds.indexOf(userId), 1)
-        await Promise.all([user.save(), friend.save(), createChat({ userIds: [userId, friendId] })])
+        let chatPromise
+        if (!chat) chatPromise = createChat({ userIds: [userId, friendId] })
+        await Promise.all([user.save(), friend.save(), chatPromise])
     } else throw new Error('No such friend request')
+}
+
+async function unfriend(userId, friendId) {
+    const [user, friend] = await Promise.all([User.findById(userId), User.findById(friendId)])
+    if (user && friend) {
+        user.friendIds.splice(user.friendIds.indexOf(friendId), 1)
+        friend.friendIds.splice(friend.friendIds.indexOf(userId), 1)
+        await Promise.all([user.save(), friend.save()])
+    } else throw new Error('No such friend')
 }
 
 async function getFriendRequests(userId, skip) {
@@ -69,6 +80,7 @@ module.exports = {
     findUserById,
     requestFriendship,
     acceptFriendship,
+    unfriend,
     getFriendRequests,
     getFriends,
     deleteUser

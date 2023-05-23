@@ -44,9 +44,14 @@ addEventListener('scroll', async e => {
 
 list.addEventListener('click', async e => {
     if (e.target.tagName != 'A') return
+    const li = e.target.parentElement
     if (e.target.textContent == 'Accept') {
-        const li = e.target.parentElement
         await put('people/accept-friend', { friendId: li.id })
         li.remove()
+    } else if (e.target.textContent == 'Unfriend') {
+        if (window.confirm('Are you sure?')) {
+            await put('people/remove-friend', { friendId: li.id })
+            li.remove()
+        }
     }
 })

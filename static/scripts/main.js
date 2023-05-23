@@ -8,6 +8,7 @@ const socket = io('/', { query: `userId=${userId}` });
 const postsUl = document.querySelector('.homePosts')
 const profilePic = document.getElementById('profilePic')
 const chatIcon = document.querySelector('#chatIcon svg')
+const chatIconPath = document.querySelector('#chatIcon path')
 const dropDown = document.getElementById('dropDown')
 let currentViewName
 let isLoadingChats = false
@@ -16,19 +17,16 @@ let openChatBoxes = []
 let chatSkip = 0
 let postsSkip = 1
 window.addEventListener('click', async (e) => {
-    if (dropDown.style.display == 'flex' && e.target != dropDown && e.target != profilePic && e.target != chatIcon) {
+    if (dropDown.style.display == 'flex' && e.target != dropDown && e.target != profilePic && e.target != chatIcon && e.target != chatIconPath) {
         dropDown.style.display = 'none'
     } else if (e.target == profilePic) {
         handleDropDown('profilePic', profilePicView)
-        dropDown.style.height = '60px'
-    } else if (e.target == chatIcon) {
+    } else if (e.target == chatIcon || e.target == chatIconPath) {
         chatSkip = 0
         const chats = await get('chats?skip=' + chatSkip++)
-        if (chats.length * 34 + 33 < window.innerHeight) dropDown.style.height = chats.length * 34 + 33 + 'px'
-        else dropDown.style.height = window.innerHeight - 100 + 'px'
         handleDropDown('chatView', chatIconView, chats)
     }
-})
+},)
 
 addEventListener('scroll', async e => {
     if (postsUl.getBoundingClientRect().bottom < innerHeight && !isLoadingPosts) {
@@ -62,6 +60,13 @@ function handleDropDown(name, viewCallBack, ...params) {
     if (dropDown.style.display != 'flex' || currentViewName != name) {
         dropDown.style.display = 'flex'
         dropDown.innerHTML = viewCallBack(...params)
+        if (name == 'chatView') {
+            const liHeight = dropDown.querySelector('ul').children[0].offsetHeight
+            const lisCount = dropDown.querySelector('ul').children.length
+            if (liHeight * lisCount + 33 < window.innerHeight) dropDown.style.height = liHeight * lisCount + 33 + 'px'
+            else dropDown.style.height = window.innerHeight - 100 + 'px'
+        } else if (name == 'profilePic') dropDown.style.height = '60px'
+
         currentViewName = name
     } else if (currentViewName == name) {
         dropDown.style.display = 'none'

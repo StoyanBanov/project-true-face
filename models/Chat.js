@@ -5,6 +5,7 @@ const schema = new Schema({
     userIds: { type: [ObjectId], ref: 'User', required: true },
     admin: { type: ObjectId, ref: 'User' },
     name: { type: String },
+    type: { type: String, enum: ['group', 'friend'], default: 'friend' },
     settingsId: { type: ObjectId, ref: 'ChatSettings' }
 })
 
