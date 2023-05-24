@@ -17,7 +17,7 @@
         <div>
             <a class="navIcon" href="/"><img width="120px" src="/static/images/logo/logoType.png"></a>
         </div>
-        <div id="searchNmenu">
+        <div id="searchNmenu" class="{{#if isUser}}menuUser{{else}}menuGuest{{/if}}">
             <ul id="headerUl">
                 {{#if isUser}}
                 <li>

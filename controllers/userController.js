@@ -1,7 +1,7 @@
 const { body } = require('express-validator');
 const formBody = require('../middleware/formBody');
 const { getUserPosts, deletePost } = require('../services/postService');
-const { updateUserProperty, getUserAndSettings, updateUser, deleteUser } = require('../services/userService');
+const { updateUserProperty, getUserAndSettings, updateUser, deleteUser, findUserById } = require('../services/userService');
 const { createToken } = require('../util/jwtUtil');
 
 const userController = require('express').Router()
@@ -99,6 +99,22 @@ userController.get('/current-user', (req, res) => {
     const select = req.query.select
     if (select) res.json(req.user[select])
     else res.json(req.user)
+})
+
+userController.get('/:id', async (req, res) => {
+    try {
+        const user = await findUserById(req.params.id)
+        if (user) {
+            if (user.friendIds.map(String).includes(req.user._id)) user.isFriend = true
+            if (user.friendRequestIds.map(String).includes(req.user._id)) user.isRequested = true
+            if (user.friendPendingIds.map(String).includes(req.user._id)) user.hasRequested = true
+            res.render('profileDetails', user)
+        } else throw new Error('No such user')
+
+    } catch (error) {
+        console.log(error);
+        res.end()
+    }
 })
 
 module.exports = userController

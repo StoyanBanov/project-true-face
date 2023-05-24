@@ -1,0 +1,18 @@
+<div class="profileContainer">
+    <div class="profileBox">
+        <div class="profileTop">
+            <div class="profileName">
+                <img src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png{{/if}}">
+                <p>{{username}}</p>
+            </div>
+            {{#if isFriend}}<a href="/people/{{_id}}/unfriend">Unfriend</a>{{/if}}
+            {{#if isRequested}}<a href="/people/{{_id}}/">Undo request</a>{{/if}}
+            {{#if hasRequested}}<a href="/people/{{_id}}/accept">Accept</a>{{/if}}
+        </div>
+        <div class="profileInfoBox">
+            <a href="javascript:void(0)">Photos</a>
+            <a href="javascript:void(0)">Friends</a>
+            <a href="javascript:void(0)">Posts</a>
+        </div>
+    </div>
+</div>

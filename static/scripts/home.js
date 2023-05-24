@@ -3,7 +3,7 @@ import { get, put, post, del } from "/static/scripts/api.js"
 import { handleSubmit } from "/static/scripts/util.js"
 
 document.querySelector('.homePosts').addEventListener('click', async e => {
-    if (e.target.tagName != 'A') return
+    if (e.target.tagName != 'A' || e.target.id == 'postUsername') return
     e.preventDefault()
     let postDiv = e.target.parentElement.parentElement
     let id = postDiv.id

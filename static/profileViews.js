@@ -11,8 +11,8 @@ export function postsView(posts) {
     return `${posts.map(p => `<li class="postCard" id="${p._id}">
     ${!p.isCurrentUserPost ? `<div>
         <img class="postProfilePic" width="50" height="50"
-            src="/static/images/{{#if ownerId.profilePic}}{{ownerId.profilePic}}{{else}}profile.png{{/if}}">
-        <a href="/profile/">{{ownerId.username}}</a>
+            src="/static/images/${p.ownerId.profilePic ?? profile.png}">
+        <a id="postUsername" href="/profile/${p.ownerId._id}">${p.ownerId.username}</a>
     </div>` : ''}
     <p>${p.text}</p>
     ${p.images ? p.images.map(i => `<img width="500px" height="700px" src="/static/images/${i}">`).join('\n') : ''}
