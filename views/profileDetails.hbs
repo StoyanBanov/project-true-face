@@ -1,13 +1,14 @@
+<script src="/static/scripts/profileDetails.js" type="module"></script>
+
 <div class="profileContainer">
-    <div class="profileBox">
+    <div id="{{_id}}" class="profileBox">
         <div class="profileTop">
             <div class="profileName">
                 <img src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png{{/if}}">
                 <p>{{username}}</p>
             </div>
-            {{#if isFriend}}<a href="/people/{{_id}}/unfriend">Unfriend</a>{{/if}}
-            {{#if isRequested}}<a href="/people/{{_id}}/">Undo request</a>{{/if}}
-            {{#if hasRequested}}<a href="/people/{{_id}}/accept">Accept</a>{{/if}}
+            <a href="javascript:void(0)">{{#if isFriend}}Remove{{else}} {{#if isRequested}}Undo request{{else}}{{#if
+                hasRequested}}Accept{{else}}Request{{/if}}{{/if}} {{/if}}</a>
         </div>
         <div class="profileInfoBox">
             <a href="javascript:void(0)">Photos</a>

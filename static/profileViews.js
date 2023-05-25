@@ -3,7 +3,7 @@ export function friendsView(users) {
     <img width="100" height="100" src="/static/images/${u.profilePic ?? 'profile.png'}">
     <h2>${u.username}</h2>
     <p>${u.friendsCount} friends</p>
-    ${u.isFriend ? `<a href="javascript:void(0)">Unfriend</a>` : u.isRequested ? `<a href="javascript:void(0)">Accept</a>` : `<a href="javascript:void(0)">Add</a>`}
+    ${u.isFriend ? `<a href="javascript:void(0)">Remove</a>` : u.isRequested ? `<a href="javascript:void(0)">Accept</a>` : `<a href="javascript:void(0)">Add</a>`}
     </li > `).join('\n')}`
 }
 

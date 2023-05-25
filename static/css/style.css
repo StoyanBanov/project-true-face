@@ -481,6 +481,10 @@ nav>div {
     align-items: baseline;
 }
 
+.profileTop a {
+    width: 150px;
+}
+
 .profileName {
     width: 100%;
     display: flex;

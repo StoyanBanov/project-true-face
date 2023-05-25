@@ -13,14 +13,13 @@ window.addEventListener('scroll', async e => {
 usersList.addEventListener('click', async e => {
     if (e.target.tagName != 'A') return
     const li = e.target.parentElement
-    e.target.remove()
     if (e.target.textContent == 'Add') {
         await put('people/request-friend', { friendId: li.id })
-        li.innerHTML += `<p>Friendship requested</p>`
+        e.target.textContent = 'Undo request'
     } else if (e.target.textContent == 'Accept') {
         await put('people/accept-friend', { friendId: li.id })
-        li.innerHTML += `<p>friends</p>`
-    } else if (e.target.textContent == 'Unfriend') {
+        e.target.textContent = 'Unfriend'
+    } else if (e.target.textContent == 'Remove') {
         if (window.confirm('Are you sure?')) {
             await put('people/remove-friend', { friendId: li.id })
             e.target.textContent = 'Add'

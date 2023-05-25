@@ -1,7 +1,6 @@
 import { friendsView, postsView } from "/static/profileViews.js"
 import { get, put } from "/static/scripts/api.js"
 
-//const showRequestsA = document.getElementById('showRequests')
 const list = document.getElementById('profileList')
 const listOptions = document.getElementById('profileListOptions')
 let currentListOption = 'showPosts'

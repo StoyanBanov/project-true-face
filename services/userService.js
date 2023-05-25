@@ -56,6 +56,15 @@ async function unfriend(userId, friendId) {
     } else throw new Error('No such friend')
 }
 
+async function undoFriendRequest(userId, friendId) {
+    const [user, friend] = await Promise.all([User.findById(userId), User.findById(friendId)])
+    if (user && friend) {
+        user.friendPendingIds.splice(user.friendPendingIds.indexOf(friendId), 1)
+        friend.friendRequestIds.splice(friend.friendRequestIds.indexOf(userId), 1)
+        await Promise.all([user.save(), friend.save()])
+    } else throw new Error('No such friend')
+}
+
 async function getFriendRequests(userId, skip) {
     return User.findById(userId).select('friendRequestIds').populate('friendRequestIds').skip(skip * 10).limit(10).lean()
 }
@@ -81,6 +90,7 @@ module.exports = {
     requestFriendship,
     acceptFriendship,
     unfriend,
+    undoFriendRequest,
     getFriendRequests,
     getFriends,
     deleteUser

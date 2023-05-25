@@ -1,4 +1,4 @@
-const { getAllUsers, requestFriendship, acceptFriendship, getFriendRequests, getFriends, unfriend } = require('../services/userService');
+const { getAllUsers, requestFriendship, acceptFriendship, getFriendRequests, getFriends, unfriend, undoFriendRequest } = require('../services/userService');
 
 const peopleController = require('express').Router()
 
@@ -59,12 +59,22 @@ peopleController.put('/accept-friend', async (req, res) => {
 peopleController.put('/remove-friend', async (req, res) => {
     try {
         await unfriend(req.user._id, req.body.friendId)
-        res.status(301)
+        res.redirect('/profile/' + req.params.id)
     } catch (error) {
         console.log(error);
-        res.status(404)
+        res.end()
     }
-    res.end()
+})
+
+peopleController.put('/undo-request-friend', async (req, res) => {
+    console.log('here');
+    try {
+        await undoFriendRequest(req.user._id, req.body.friendId)
+        res.redirect('/profile/' + req.params.id)
+    } catch (error) {
+        console.log(error);
+        res.end()
+    }
 })
 
 module.exports = peopleController
