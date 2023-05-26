@@ -1,21 +1,19 @@
 import { profilePicView, chatIconView, chatIconViewLi, chatBoxView, chatBoxLiView, chatBoxSettingsView } from "/static/views.js"
-import { postsView } from "/static/profileViews.js"
 import { get, put, del } from "/static/scripts/api.js"
 
 const userId = await get('profile/current-user?select=_id')
 const socket = io('/', { query: `userId=${userId}` });
 
-const postsUl = document.querySelector('.homePosts')
 const profilePic = document.getElementById('profilePic')
 const chatIcon = document.querySelector('#chatIcon svg')
 const chatIconPath = document.querySelector('#chatIcon path')
 const dropDown = document.getElementById('dropDown')
 let currentViewName
 let isLoadingChats = false
-let isLoadingPosts = false
 let openChatBoxes = []
 let chatSkip = 0
-let postsSkip = 1
+
+
 window.addEventListener('click', async (e) => {
     if (dropDown.style.display == 'flex' && e.target != dropDown && e.target != profilePic && e.target != chatIcon && e.target != chatIconPath) {
         dropDown.style.display = 'none'
@@ -27,15 +25,6 @@ window.addEventListener('click', async (e) => {
         handleDropDown('chatView', chatIconView, chats)
     }
 },)
-
-addEventListener('scroll', async e => {
-    if (postsUl.getBoundingClientRect().bottom < innerHeight && !isLoadingPosts) {
-        isLoadingPosts = true
-        const posts = await get('all-posts?skip=' + postsSkip++)
-        postsUl.innerHTML += postsView(posts)
-        isLoadingPosts = false
-    }
-})
 
 dropDown.addEventListener('click', async e => {
     if (e.target.tagName != 'A' || dropDown.children[0] == e.target) return

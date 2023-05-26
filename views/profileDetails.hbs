@@ -15,5 +15,10 @@
             <a href="javascript:void(0)">Friends</a>
             <a href="javascript:void(0)">Posts</a>
         </div>
+        <ul>
+            {{#each posts}}
+            {{>postCard}}
+            {{/each}}
+        </ul>
     </div>
 </div>

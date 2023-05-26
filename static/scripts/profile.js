@@ -18,7 +18,7 @@ listOptions.addEventListener('click', async e => {
         const friends = await get('people/friends?skip=' + skip++)
         list.innerHTML = friends.length > 0 ? friendsView(friends) : list.innerHTML = `<li><p>No friends</p></li>`
     } else if (e.target.id == 'showPosts') {
-        const posts = await get('profile/my-posts?skip=' + skip++)
+        const posts = await get('profile/user-posts?skip=' + skip++)
         list.innerHTML = posts.length > 0 ? postsView(posts) : list.innerHTML = `<li><p>You haven\'t posted yet</p></li>`
     }
     currentListOption = e.target.id
@@ -34,7 +34,7 @@ addEventListener('scroll', async e => {
             const friends = await get('people/friends?skip=' + skip++)
             list.innerHTML += friendsView(friends)
         } else if (currentListOption == 'showPosts') {
-            const posts = await get('profile/my-posts?skip=' + skip++)
+            const posts = await get('profile/user-posts?skip=' + skip++)
             list.innerHTML += postsView(posts)
         }
         isAddingMoreData = false

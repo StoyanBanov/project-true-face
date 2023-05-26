@@ -11,7 +11,7 @@ export function postsView(posts) {
     return `${posts.map(p => `<li class="postCard" id="${p._id}">
     ${!p.isCurrentUserPost ? `<div>
         <img class="postProfilePic" width="50" height="50"
-            src="/static/images/${p.ownerId.profilePic ?? profile.png}">
+            src="/static/images/${p.ownerId.profilePic ?? 'profile.png'}">
         <a id="postUsername" href="/profile/${p.ownerId._id}">${p.ownerId.username}</a>
     </div>` : ''}
     <p>${p.text}</p>

@@ -16,9 +16,10 @@ userController.get('/', async (req, res) => {
     res.render('profile', Object.assign(req.user, { posts }))
 })
 
-userController.get('/my-posts', async (req, res) => {
+userController.get('/user-posts', async (req, res) => {
     try {
-        const posts = (await getUserPosts(req.user._id, req.query.skip)).map(a =>
+        const userId = req.query.userId ?? req.user._id
+        const posts = (await getUserPosts(userId, req.query.skip)).map(a =>
             Object.assign(a, {
                 likesCount: a.likeIds.length,
                 isLiked: a.likeIds.map(l => l.ownerId._id.toString()).includes(req.user._id),
@@ -26,7 +27,7 @@ userController.get('/my-posts', async (req, res) => {
             }))
         res.status(200).json(posts)
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.status(404).end()
     }
 })
@@ -105,12 +106,17 @@ userController.get('/:id', async (req, res) => {
     try {
         const user = await findUserById(req.params.id)
         if (user) {
+            const posts = (await getUserPosts(user._id)).map(a =>
+                Object.assign(a, {
+                    likesCount: a.likeIds.length,
+                    isLiked: a.likeIds.map(l => l.ownerId._id.toString()).includes(req.user._id),
+                    isCurrentUserPost: true
+                }))
             if (user.friendIds.map(String).includes(req.user._id)) user.isFriend = true
             if (user.friendRequestIds.map(String).includes(req.user._id)) user.isRequested = true
             if (user.friendPendingIds.map(String).includes(req.user._id)) user.hasRequested = true
-            res.render('profileDetails', user)
+            res.render('profileDetails', Object.assign(user, { posts }))
         } else throw new Error('No such user')
-
     } catch (error) {
         console.log(error);
         res.end()
