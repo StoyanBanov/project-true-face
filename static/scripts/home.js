@@ -38,6 +38,8 @@ document.querySelector('.homePosts').addEventListener('click', async e => {
     }
 })
 
+
+//Todo: Use scrollUtil
 addEventListener('scroll', async e => {
     if (postsUl && postsUl.getBoundingClientRect().bottom < innerHeight && !isLoadingPosts) {
         isLoadingPosts = true

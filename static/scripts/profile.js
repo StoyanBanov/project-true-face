@@ -1,29 +1,35 @@
 import { friendsView, postsView } from "/static/profileViews.js"
 import { get, put } from "/static/scripts/api.js"
+import { scrollWindow, scrollProps } from "/static/scripts/scrollWindowUtil.js"
 
 const list = document.getElementById('profileList')
 const listOptions = document.getElementById('profileListOptions')
-let currentListOption = 'showPosts'
-let skip = 1
-let isAddingMoreData = false
+//let currentListOption = 'showPosts'
+//let skip = 1
+//let isAddingMoreData = false
+
+scrollProps.skip = 1
+scrollProps.currentListOption = 'showPosts'
+scrollWindow(list)
 
 listOptions.addEventListener('click', async e => {
     if (list.style.display != 'block') list.style.display = 'block'
-    if (e.target.id == currentListOption) return
-    skip = 0
+    if (e.target.id == scrollProps.currentListOption) return
+    scrollProps.skip = 0
     if (e.target.id == 'showRequests') {
-        const friendRequests = await get('people/request-friend?skip=' + skip++)
+        const friendRequests = await get('people/request-friend?skip=' + scrollProps.skip++)
         list.innerHTML = friendRequests.length > 0 ? friendsView(friendRequests) : list.innerHTML = `<li><p>No requests</p></li>`
     } else if (e.target.id == 'showFriends') {
-        const friends = await get('people/friends?skip=' + skip++)
+        const friends = await get('people/friends?skip=' + scrollProps.skip++)
         list.innerHTML = friends.length > 0 ? friendsView(friends) : list.innerHTML = `<li><p>No friends</p></li>`
     } else if (e.target.id == 'showPosts') {
-        const posts = await get('profile/user-posts?skip=' + skip++)
+        const posts = await get('profile/user-posts?skip=' + scrollProps.skip++)
         list.innerHTML = posts.length > 0 ? postsView(posts) : list.innerHTML = `<li><p>You haven\'t posted yet</p></li>`
     }
-    currentListOption = e.target.id
+    scrollProps.currentListOption = e.target.id
 })
 
+/*
 addEventListener('scroll', async e => {
     if (list.getBoundingClientRect().bottom < window.innerHeight && !isAddingMoreData) {
         isAddingMoreData = true
@@ -39,7 +45,7 @@ addEventListener('scroll', async e => {
         }
         isAddingMoreData = false
     }
-})
+})*/
 
 list.addEventListener('click', async e => {
     if (e.target.tagName != 'A') return
