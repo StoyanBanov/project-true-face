@@ -4,7 +4,8 @@ const peopleController = require('express').Router()
 
 peopleController.get('/friends', async (req, res) => {
     try {
-        const { friendIds: friends } = (await getFriends(req.user._id, req.query.skip)) ?? { friendIds: [] }
+        const userId = req.query.userId ?? req.user._id
+        const { friendIds: friends } = (await getFriends(userId, req.query.skip)) ?? { friendIds: [] }
         friends.map(u => Object.assign(u, { friendsCount: u.friendIds.length, isFriend: true }))
         res.status(200).json(friends)
     } catch (error) {

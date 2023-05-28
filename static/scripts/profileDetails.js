@@ -1,5 +1,5 @@
 import { scrollWindow, scrollProps } from "/static/scripts/scrollWindowUtil.js"
-import { postsView } from "/static/profileViews.js"
+import { postsView, friendsView } from "/static/profileViews.js"
 import { get, put } from "/static/scripts/api.js"
 
 const profileBox = document.querySelector('.profileBox')
@@ -16,10 +16,21 @@ profileBox.addEventListener('click', async e => {
     if (['Accept', 'Remove', 'Undo request', 'Request'].includes(btnName)) {
         await put(`people/${btnName.replace(' ', '-').toLocaleLowerCase()}-friend`, { friendId: profileId })
         window.location.reload()
-    } else if (e.target.textContent == 'Posts' && scrollProps.currentListOption != 'showPosts') {
-        scrollProps.currentListOption = 'showPosts'
+    } else {
         scrollProps.skip = 0
-        const posts = await get(`profile/user-posts?skip=${scrollProps.skip}&userId=${profileId}`)
-        list.innerHTML = postsView(posts)
-    } else scrollProps.currentListOption = ''
+        let url
+        let view
+        if (e.target.textContent == 'Posts' && scrollProps.currentListOption != 'showPosts') {
+            url = 'profile/user-posts'
+            view = postsView
+        } else if (e.target.textContent == 'Friends' && scrollProps.currentListOption != 'showFriends') {
+            url = 'people/friends'
+            view = friendsView
+        } else scrollProps.currentListOption = ''
+        if (view) {
+            const data = await get(url + `?skip=${scrollProps.skip++}&userId=${profileId}`)
+            list.innerHTML = view(data)
+            scrollProps.currentListOption = e.target.id
+        }
+    }
 })
