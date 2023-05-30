@@ -1,11 +1,10 @@
 import { commentsView, createCommentView, commentLiView } from "/static/views.js"
 import { get, put, post, del } from "/static/scripts/api.js"
 import { handleSubmit } from "/static/scripts/util.js"
-import { postsView } from "/static/profileViews.js"
+import { scrollWindow } from "/static/scripts/scrollWindowUtil.js"
 
 const postsUl = document.querySelector('.homePosts')
-let postsSkip = 1
-let isLoadingPosts = false
+scrollWindow(postsUl, 'showHomePosts', 1)
 
 document.querySelector('.homePosts').addEventListener('click', async e => {
     if (e.target.tagName != 'A' || e.target.id == 'postUsername') return
@@ -35,17 +34,6 @@ document.querySelector('.homePosts').addEventListener('click', async e => {
     } else if (e.target.textContent == 'Delete') {
         await del(`posts?${e.target.parentElement.className == 'commentActions' ? `commentId` : `postId`}=${id}`)
         e.target.parentElement.parentElement.parentElement.remove()
-    }
-})
-
-
-//Todo: Use scrollUtil
-addEventListener('scroll', async e => {
-    if (postsUl && postsUl.getBoundingClientRect().bottom < innerHeight && !isLoadingPosts) {
-        isLoadingPosts = true
-        const posts = await get('all-posts?skip=' + postsSkip++)
-        postsUl.innerHTML += postsView(posts)
-        isLoadingPosts = false
     }
 })
 
