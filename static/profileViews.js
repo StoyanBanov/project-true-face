@@ -1,14 +1,14 @@
 export function friendsView(users) {
-    return `${users.map(u => `<li id="${u._id}">
+    return `${users.map(u => `<div class="userCard" id="${u._id}">
     <img width="100" height="100" src="/static/images/${u.profilePic ?? 'profile.png'}">
     <h2>${u.username}</h2>
     <p>${u.friendsCount} friends</p>
     ${u.isFriend ? `<a href="javascript:void(0)">Remove</a>` : u.isRequested ? `<a href="javascript:void(0)">Accept</a>` : `<a href="javascript:void(0)">Add</a>`}
-    </li > `).join('\n')}`
+    </div> `).join('\n')}`
 }
 
 export function postsView(posts) {
-    return `${posts.map(p => `<li class="postCard" id="${p._id}">
+    return `${posts.map(p => `<div class="postCard" id="${p._id}">
     ${!p.isCurrentUserPost ? `<div>
         <img class="postProfilePic" width="50" height="50"
             src="/static/images/${p.ownerId.profilePic ?? 'profile.png'}">
@@ -22,5 +22,5 @@ export function postsView(posts) {
         <a href="javascript:void(0)">Comments</a>
         ${p.isCurrentUserPost ? `<a href="/profile/deletePost/{{_id}}">Delete</a>` : ''}
     </div>
-    </li > `).join('\n')}`
+    </div> `).join('\n')}`
 }

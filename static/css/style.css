@@ -525,3 +525,15 @@ nav>div {
     background-color: rgb(224, 241, 255);
     color: rgb(22, 134, 233);
 }
+
+
+
+
+.friendsContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.userCard {
+    margin: 10px;
+}

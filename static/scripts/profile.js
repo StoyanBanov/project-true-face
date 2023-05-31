@@ -7,9 +7,6 @@ const listOptions = document.getElementById('profileListOptions')
 scrollWindow(list, 'showPosts', 1)
 
 listOptions.addEventListener('click', async e => {
-    if (list.style.display != 'block') list.style.display = 'block'
-    if (e.target.id == scrollProps.currentListOption) return
-    scrollProps.skip = 0
     await loadDataOnWindow(list, e.target.id)
 })
 

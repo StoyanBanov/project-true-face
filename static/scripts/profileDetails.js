@@ -3,7 +3,7 @@ import { put } from "/static/scripts/api.js"
 
 const profileBox = document.querySelector('.profileBox')
 const profileId = profileBox.id
-const list = profileBox.querySelector('ul')
+const list = document.getElementById('profileList')
 
 scrollWindow(list, 'showPosts', 1, profileId)
 
