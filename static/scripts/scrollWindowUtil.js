@@ -39,7 +39,7 @@ async function setUpDataAndView(list, profileId, isScroll) {
         url = 'all-posts'
     }
     if (view) {
-        const data = await get(url + `?skip=${0}${profileId ? `&userId=${profileId}` : ''}`)
+        const data = await get(url + `?skip=${skip++}${profileId ? `&userId=${profileId}` : ''}`)
         if (!isScroll) list.innerHTML = data.length > 0 ? view(data) : `<li><p>Nothing to show</p></li>`
         else if (data.length > 0) list.innerHTML += view(data)
     }

@@ -1,10 +1,12 @@
 const fs = require('fs').promises
+const { EventEmitter } = require('stream');
 
 module.exports = () => (req, res, next) => {
     req.body = {}
     let rawBodyArr = []
     let currentData = ''
     const boundary = req.headers['content-type'].split('boundary=')[1].trim()
+    let isIt = false
     req.on('data', chunk => {
         rawBodyArr.push(chunk.toString('binary'))
     })
