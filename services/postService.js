@@ -42,7 +42,9 @@ async function getUserPosts(ownerId, skip) {
             populate: {
                 path: 'ownerId',
             }
-        }).skip(skip * 10).limit(10).lean()
+        })
+        .populate('ownerId')
+        .skip(skip * 10).limit(10).lean()
 }
 
 async function createPost(ownerId, { text, images }) {

@@ -10,12 +10,12 @@
             <a href="javascript:void(0)">{{#if isFriend}}Remove{{else}} {{#if isRequested}}Undo request{{else}}{{#if
                 hasRequested}}Accept{{else}}Request{{/if}}{{/if}} {{/if}}</a>
         </div>
-        <div class="profileInfoBox">
+        <div id="profileListOptions" class="profileInfoBox">
             <a id="showPhotos" href="javascript:void(0)">Photos</a>
             <a id="showFriends" href="javascript:void(0)">Friends</a>
             <a id="showPosts" href="javascript:void(0)">Posts</a>
         </div>
-        <ul>
+        <ul id="profileList">
             {{#each posts}}
             {{>postCard}}
             {{/each}}

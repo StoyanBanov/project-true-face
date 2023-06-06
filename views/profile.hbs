@@ -1,22 +1,31 @@
 <script src="/static/scripts/profile.js" type="module"></script>
 
-<img width="100" height="100" src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png{{/if}}">
+<div class="profileContainer">
+    <div id="{{_id}}" class="profileBox">
 
-<form action="/profile" method="post" enctype="multipart/form-data">
-    <label></label><br>
-    <input type="file" name="profilePic" value="{{#if profilePic}}change{{else}}upload{{/if}}"><br>
-    <input type="submit" value="Upload"><br>
-</form>
+        <div class="profileTop">
+            <div class="profileName">
+                <img src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png{{/if}}">
+                <p>{{username}}</p>
+            </div>
+        </div>
+        <form action="/profile" method="post" enctype="multipart/form-data">
+            <label></label><br>
+            <input type="file" name="profilePic" value="{{#if profilePic}}change{{else}}upload{{/if}}"><br>
+            <input type="submit" value="Upload"><br>
+        </form>
 
-<div id="profileListOptions">
-    <a id="showRequests" href="javascript:void(0)">Friendship requests</a>
-    <a id="showFriends" href="javascript:void(0)">Friends</a>
-    <a id="showPosts" href="javascript:void(0)">My posts</a>
-</div>
-<div id="profileList">
-    {{#if posts}}
-    {{#each posts}}
-    {{>postCard}}
-    {{/each}}
-    {{/if}}
+        <div id="profileListOptions" class="profileInfoBox">
+            <a id="showRequests" href="javascript:void(0)">Friendship requests</a>
+            <a id="showFriends" href="javascript:void(0)">Friends</a>
+            <a id="showPosts" href="javascript:void(0)">My posts</a>
+        </div>
+        <ul id="profileList">
+            {{#if posts}}
+            {{#each posts}}
+            {{>postCard}}
+            {{/each}}
+            {{/if}}
+        </ul>
+    </div>
 </div>

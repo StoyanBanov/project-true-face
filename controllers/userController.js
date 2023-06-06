@@ -110,12 +110,13 @@ userController.get('/:id', async (req, res) => {
                 Object.assign(a, {
                     likesCount: a.likeIds.length,
                     isLiked: a.likeIds.map(l => l.ownerId._id.toString()).includes(req.user._id),
-                    isCurrentUserPost: true
+                    isCurrentUserPost: false
                 }))
             if (user.friendIds.map(String).includes(req.user._id)) user.isFriend = true
             if (user.friendRequestIds.map(String).includes(req.user._id)) user.isRequested = true
             if (user.friendPendingIds.map(String).includes(req.user._id)) user.hasRequested = true
             res.render('profileDetails', Object.assign(user, { posts }))
+            console.log(posts[0].ownerId);
         } else throw new Error('No such user')
     } catch (error) {
         console.log(error);

@@ -1,5 +1,6 @@
 import { put } from "/static/scripts/api.js"
 import { scrollWindow, loadDataOnWindow } from "/static/scripts/scrollWindowUtil.js"
+import { handlePostAction } from "/static/scripts/postActionsUtil.js"
 
 const list = document.getElementById('profileList')
 const listOptions = document.getElementById('profileListOptions')
@@ -21,5 +22,7 @@ list.addEventListener('click', async e => {
             await put('people/remove-friend', { friendId: li.id })
             li.remove()
         }
+    } else {
+        await handlePostAction(e.target)
     }
 })

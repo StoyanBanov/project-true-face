@@ -6,7 +6,7 @@ let skip
 
 export function scrollWindow(list, listOptionInitial, skipInitial, profileId) {
     currentListOption = listOptionInitial
-    setContainerClass(list, currentListOption)
+    setContainer(list, currentListOption)
     skip = skipInitial
     let isAddingMoreData = false
     addEventListener('scroll', async e => {
@@ -21,7 +21,7 @@ export function scrollWindow(list, listOptionInitial, skipInitial, profileId) {
 export async function loadDataOnWindow(list, btnId, profileId) {
     if (btnId == currentListOption) return
     currentListOption = btnId ?? currentListOption
-    setContainerClass(list, currentListOption)
+    setContainer(list, currentListOption)
     skip = 0
     await setUpDataAndView(list, profileId, false)
 }
@@ -45,9 +45,8 @@ async function setUpDataAndView(list, profileId, isScroll) {
     }
 }
 
-function setContainerClass(container, listOption) {
-    console.log(listOption);
+function setContainer(container, listOption) {
     if (!listOption.includes('Post'))
         container.className = 'friendsContainer'
-    else container.className = ''
+    else container.className = 'homePosts'
 }
