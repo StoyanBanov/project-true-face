@@ -537,3 +537,40 @@ nav>div {
 .userCard {
     margin: 10px;
 }
+
+
+
+
+.settingsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.settingsContainer form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.settingsContainer form>div {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    width: 250px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.settingsContainer label {
+    width: 200px;
+}
+
+.settingsContainer select {
+    cursor: pointer;
+}
+
+.settingsContainer a {
+    color: red;
+}

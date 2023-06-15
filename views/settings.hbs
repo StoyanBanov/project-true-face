@@ -1,19 +1,21 @@
-<div>
+<div class="settingsContainer">
     <form action="/profile/settings" method="post">
-        <label>Who can see my posts: <select name="seeMyPosts" id="myPostsSelect">
+        <div>
+            <label for="myPostsSelect">Who can see my posts: </label>
+            <select name="seeMyPosts" id="myPostsSelect">
                 {{#each myPostsSelect}}
                 <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
                 {{/each}}
             </select>
-        </label>
-        <br><br>
-        <label>I see posts from: <select name="postsISee" id="othersPostsSelect">
+        </div>
+        <div>
+            <label for="othersPostsSelect">I see posts from: </label>
+            <select name="postsISee" id="othersPostsSelect">
                 {{#each othersPostsSelect}}
                 <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
                 {{/each}}
             </select>
-        </label>
-        <br><br>
+        </div>
         <input type="submit" value="Save changes">
     </form><br><br>
     <a href="/profile/delete">Remove profile</a>
