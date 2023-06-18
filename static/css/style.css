@@ -495,8 +495,9 @@ nav>div {
 }
 
 .profileName img {
-    width: 70px;
-    height: 70px;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
 }
 

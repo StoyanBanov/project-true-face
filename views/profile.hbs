@@ -5,14 +5,14 @@
 
         <div class="profileTop">
             <div class="profileName">
-                <img src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png{{/if}}">
+                <img id="profilePicFromInput"
+                    src="/static/images/{{#if profilePic}}{{profilePic}}{{else}}profile.png{{/if}}">
                 <p>{{username}}</p>
             </div>
         </div>
         <form action="/profile" method="post" enctype="multipart/form-data">
-            <label></label><br>
-            <input type="file" name="profilePic" value="{{#if profilePic}}change{{else}}upload{{/if}}"><br>
-            <input type="submit" value="Upload"><br>
+            <input type="file" id="profilePicInput" name="profilePic"><br>
+            <input type="submit" value="{{#if profilePic}}Change{{else}}Upload{{/if}}"><br>
         </form>
 
         <div id="profileListOptions" class="profileInfoBox">
