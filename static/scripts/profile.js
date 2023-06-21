@@ -12,9 +12,9 @@ document.getElementById('profilePicInput').addEventListener('change', e => {
     if (file) {
         let fileReader = new FileReader();
         fileReader.readAsDataURL(file);
-        fileReader.onload = () => {
+        fileReader.addEventListener('load', () => {
             document.getElementById('profilePicFromInput').src = fileReader.result
-        }
+        })
     }
 })
 
