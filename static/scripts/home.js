@@ -13,6 +13,18 @@ postsUl.addEventListener('click', async e => {
     await handlePostAction(e.target)
 })
 
+document.getElementById('postImagesInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    console.log(e.target.files.length);
+    if (file) {
+        let fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.addEventListener('load', () => {
+            //document.getElementById('profilePicFromInput').src = fileReader.result
+        })
+    }
+})
+
 export const onPostComment = handleSubmit(onComment)
 
 async function onComment({ text }, e) {

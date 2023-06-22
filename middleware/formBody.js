@@ -1,12 +1,12 @@
 const fs = require('fs').promises
-const { EventEmitter } = require('stream');
 
 module.exports = () => (req, res, next) => {
-    req.body = {}
+    req.body = {
+        postImages: []
+    }
     let rawBodyArr = []
     let currentData = ''
     const boundary = req.headers['content-type'].split('boundary=')[1].trim()
-    let isIt = false
     req.on('data', chunk => {
         rawBodyArr.push(chunk.toString('binary'))
     })
@@ -30,7 +30,8 @@ module.exports = () => (req, res, next) => {
                         const prefix = ('00000' + (Math.random() * 9999999 | 0).toString(16)).slice(-5)
                         const uniqueFilename = `${prefix}_${filename}`
                         await fs.writeFile(`./static/images/${uniqueFilename}`, file, 'binary')
-                        req.body[fieldName] = uniqueFilename
+                        req.body.postImages.push(uniqueFilename)
+                        console.log(uniqueFilename);
                     }
                 }
             } catch (error) {

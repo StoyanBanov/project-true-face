@@ -51,7 +51,7 @@ async function createPost(ownerId, { text, images }) {
     await Post.create({
         ownerId,
         text,
-        images
+        images: images || []
     })
 }
 

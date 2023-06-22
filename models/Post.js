@@ -13,6 +13,7 @@ const schema = new Schema({
 
 schema.pre('findOneAndDelete', { document: false, query: true }, async function () {
     const post = await this.model.findOne(this.getFilter())
+    //TODO fix bug
     for (const imgName of post.images) {
         fs.unlink(`./static/images/${imgName}`, (err) => {
             if (err) console.log(err);
