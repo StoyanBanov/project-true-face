@@ -1,5 +1,6 @@
 <form action="/posts/create" method="post" enctype="multipart/form-data">
-    <label for="postImagesInput">Image: <input id="postImagesInput" type="file" name="image" multiple></label><br><br>
+    <label for="postImagesInput">Image: <input id="postImagesInput" type="file" accept="image/png, image/jpeg"
+            name="image" multiple></label><br><br>
     <label>Text: </label>
     <textarea rows="5" cols="80" name="text">{{post.text}}</textarea><br><br>
     <input type="submit" value="Post">
