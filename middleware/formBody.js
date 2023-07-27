@@ -31,7 +31,6 @@ module.exports = () => (req, res, next) => {
                         const uniqueFilename = `${prefix}_${filename}`
                         await fs.writeFile(`./static/images/${uniqueFilename}`, file, 'binary')
                         req.body.postImages.push(uniqueFilename)
-                        console.log(uniqueFilename);
                     }
                 }
             } catch (error) {

@@ -4,9 +4,8 @@
 
 <p>Trueface is a social network web application. Hybrid app- between server-side and client-side.</p>
 
-
-<p><h4>Realization and Tech Stack</h4>
-    -Vanilla JS client side rendering and AJAX requests;<br>
+<h4>Realization and Tech Stack</h4>
+<p>-Vanilla JS client side rendering and AJAX requests;<br>
     -Express JS server with Handlebars templates;<br>
     -MongoDB database.</p>
 

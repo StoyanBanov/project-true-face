@@ -6,6 +6,8 @@ const hbs = require('express-handlebars').create({
     extname: '.hbs'
 })
 
+const favicon = require('serve-favicon');
+
 module.exports = app => {
     app.engine('.hbs', hbs.engine)
     app.set('view engine', '.hbs')
@@ -13,6 +15,9 @@ module.exports = app => {
     app.use(urlencoded({ extended: true }))
     app.use(cookieParser())
     app.use('/static', static('static'))
+
+    app.use(favicon('static/images/logo/logo.png'))
+
     app.use(auth())
     app.use(nav())
 }
